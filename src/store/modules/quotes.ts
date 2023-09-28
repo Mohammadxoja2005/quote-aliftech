@@ -1,14 +1,7 @@
 import axios from 'axios';
 
 const state = {
-    genres: ['Inspirational',
-        'Motivational',
-        'Philosophical',
-        'Funny',
-        'Romantic',
-        'Political',
-        'Religious/Spiritual',
-        'Life Lessons'],
+    genres: [],
     quotes: [],
     authors: [],
     randomQuotes: []
@@ -25,6 +18,10 @@ const mutations = {
 
     SET_RANDOM_QUOTES(state: any, payload: any) {
         state.randomQuotes = payload;
+    },
+
+    SET_GENRES(state: any, payload: any) {
+        state.genres = payload;
     }
 }
 
@@ -102,6 +99,25 @@ const actions = {
         } catch (error) {
             console.log(error);
         }
+    },
+
+    async getGenresOfQuote({ commit }: any) {
+        try {
+            await axios.get('https://backend-aliftech.onrender.com/quotes')
+                .then((response) => {
+                    const set: any = new Set();
+
+                    response.data.map((genres: any) => {
+                        genres.genre.split(",").map((genre: any) => {
+                            set.add(genre);
+                        })
+                    })
+
+                    commit("SET_GENRES", set)
+                })
+        } catch (error) {
+            console.error(error);
+        }
     }
 }
 
@@ -109,7 +125,7 @@ const getters = {
     getQuotes: (state: any) => state.quotes,
     getGenres: (state: any) => state.genres,
     getAuthors: (state: any) => state.authors,
-    getRandomQuotes: (state: any) => state.randomQuotes
+    getRandomQuotes: (state: any) => state.randomQuotes,
 }
 
 export default {
@@ -118,6 +134,3 @@ export default {
     mutations,
     actions,
 };
-
-// "ignoreDeprecations": "5.0",
-// "verbatimModuleSyntax": true,

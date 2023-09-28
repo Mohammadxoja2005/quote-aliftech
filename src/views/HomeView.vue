@@ -30,13 +30,18 @@ const authors = reactive<Array<string>>([]);
 let quotes = reactive<Array<{ id: number, author: string, genre: string, quote: string, updatedAt: string, createdAt: string }>>([]);
 
 const filteredQuotes = reactive<Array<{ id: number, author: string, genre: string, quote: string, updatedAt: string, createdAt: string }>>([]);
-const genres = computed(() => store.getters.getGenres);
+const genres = reactive<string[]>([]);
 
 
 watchEffect(() => {
     store.dispatch('getAuthors')
         .then(() => {
             authors.push(...store.getters.getAuthors)
+        })
+
+    store.dispatch("getGenresOfQuote")
+        .then(() => {
+            genres.push(...store.getters.getGenres)
         })
 })
 
@@ -150,7 +155,7 @@ const updateQuote = (event: any) => {
         <div class="form-container">
             <div class="form-inputs">
                 <router-link to="/create" class="create-link"><button>создать цитату</button></router-link>
-                <router-link to="/random" class="create-link"><button>сделать рандомную цитату</button></router-link>
+                <!-- <router-link to="/random" class="create-link"><button>сделать рандомную цитату</button></router-link> -->
                 <div class="search-input">
                     <input type="text" v-model="searchInput" placeholder="Поиск...">
                 </div>
@@ -167,7 +172,7 @@ const updateQuote = (event: any) => {
                     </label>
                 </div>
 
-                <div class="select-inputs">
+                <!-- <div class="select-inputs">
                     <select v-model="selectedGenre">
                         <option disabled value="">Выбрать жанр</option>
                         <option v-for="(item) in genres" :value="item">{{ item }}</option>
@@ -177,23 +182,29 @@ const updateQuote = (event: any) => {
                         <option disabled value="">Выбрать автора</option>
                         <option v-for="(item) in authors" :value="item">{{ item }}</option>
                     </select>
-                </div>
-                <div class="select-inputs">
+                </div> -->
+                <!-- <div class="select-inputs">
                     <select v-model="sortByDate">
                         <option disabled value="">Сортировка по датам</option>
                         <option value="bycreate">По созданию</option>
                         <option value="byupdate">По обновлению</option>
                     </select>
-                </div>
+                </div> -->
             </div>
 
             <div class="card-container">
-                <div class="card" v-for="(item, index) in searchByChoice" :key="index">
+                <div class="card" v-for="(item, index) in  searchByChoice " :key="index">
                     <div class="card-author">{{ item.author }}</div>
                     <div class="card-quote">{{ item.quote }}</div>
 
                     <div class="card-container-updates">
-                        <div class="card-genre">Genre: {{ item.genre }}</div>
+                        Genre:
+                        <div class="card-genre" v-for="(genre, index) in item.genre.split(',')" :key="index">
+                            {{ genre }}
+                        </div>
+                    </div>
+
+                    <div class="card-container-updates">
                         <div class="card-updated">Created: {{ item.createdAt }}</div>
                         <div class="card-updated">Last Updated: {{ item.updatedAt }}</div>
                     </div>
@@ -239,7 +250,7 @@ const updateQuote = (event: any) => {
                     <label for="genre" class="label">Жанр:</label>
                     <select v-model="genre" id="genre" class="input">
                         <option disabled value="">Выберите один жанр</option>
-                        <option v-for="(item) in genres" :value="item">{{ item }}</option>
+                        <option v-for="( item ) in  genres " :value="item">{{ item }}</option>
                     </select>
                 </div>
 

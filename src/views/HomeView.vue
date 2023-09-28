@@ -25,48 +25,39 @@ let createdAt = ref<string | undefined>('');
 const now = new Date();
 const date: string = now.toISOString().slice(0, 19).replace('T', ' ');
 
-const authors = reactive<Array<string>>([]);
-
-let quotes = reactive<Array<{ id: number, author: string, genre: string, quote: string, updatedAt: string, createdAt: string }>>([]);
-
-const filteredQuotes = reactive<Array<{ id: number, author: string, genre: string, quote: string, updatedAt: string, createdAt: string }>>([]);
-const genres = reactive<string[]>([]);
-
-
-watchEffect(() => {
-    store.dispatch('getAuthors')
-        .then(() => {
-            authors.push(...store.getters.getAuthors)
-        })
-
-    store.dispatch("getGenresOfQuote")
-        .then(() => {
-            genres.push(...store.getters.getGenres)
-        })
+const quoteDetails: any = reactive({
+    authors: [],
+    genres: [],
+    quotes: [],
+    filteredQuotes: []
 })
 
+
 watchEffect(() => {
-    store.dispatch('getQuotes')
-        .then(() => {
-            quotes.push(...store.getters.getQuotes);
-            filteredQuotes.push(...store.getters.getQuotes);
-        })
+    Promise.all([store.dispatch('getAuthors'), store.dispatch("getGenresOfQuote"), store.dispatch('getQuotes')])
+        .then(
+            () => {
+                quoteDetails.authors.push(...store.getters.getAuthors)
+                quoteDetails.genres.push(...store.getters.getGenres)
+                quoteDetails.quotes.push(...store.getters.getQuotes);
+                quoteDetails.filteredQuotes.push(...store.getters.getQuotes);
+            })
 })
 
 const searchByChoice = computed(() => {
 
     switch (selectedChoice.value) {
         case 'quote': {
-            quotes = filteredQuotes.filter((item: any) => item.quote.toLowerCase().trim().includes(searchInput.value.toLowerCase().trim()))
+            quoteDetails.quotes = quoteDetails.filteredQuotes.filter((item: any) => item.quote.toLowerCase().trim().includes(searchInput.value.toLowerCase().trim()))
         }; break;
         case 'author': {
-            quotes = filteredQuotes.filter((item: any) => item.author.toLowerCase().trim().includes(searchInput.value.toLowerCase().trim()))
+            quoteDetails.quotes = quoteDetails.filteredQuotes.filter((item: any) => item.author.toLowerCase().trim().includes(searchInput.value.toLowerCase().trim()))
         }; break;
 
         default: console.log("nothing worked");
     }
 
-    const filtered = quotes.filter((item) => {
+    const filtered = quoteDetails.quotes.filter((item: any) => {
         // Check search text
         const searchTextMatch =
             searchInput.value === '' ||
@@ -250,7 +241,7 @@ const updateQuote = (event: any) => {
                     <label for="genre" class="label">Жанр:</label>
                     <select v-model="genre" id="genre" class="input">
                         <option disabled value="">Выберите один жанр</option>
-                        <option v-for="( item ) in  genres " :value="item">{{ item }}</option>
+                        <option v-for="( item ) in  quoteDetails.genres " :value="item">{{ item }}</option>
                     </select>
                 </div>
 

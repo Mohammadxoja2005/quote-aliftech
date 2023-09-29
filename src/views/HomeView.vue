@@ -10,8 +10,6 @@ const selectedAuthor = ref<string>('');
 const selectedChoice = ref<string>('quote');
 const searchInput = ref<string>('');
 
-const sortByDate = ref<string>('');
-
 const quote = ref<string>('')
 const author = ref<string>('');
 const genre = ref<number>();
@@ -80,21 +78,6 @@ const searchByChoice = computed(() => {
     })
 
     return filtered;
-})
-
-watch(sortByDate, () => {
-    switch (sortByDate.value) {
-        case 'bycreate': {
-            searchByChoice.value.sort((a: { createdAt: string }, b: { createdAt: string }) => {
-                return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-            });
-        }; break;
-        case 'byupdate': {
-            searchByChoice.value.sort((a: { updatedAt: string }, b: { updatedAt: string }) => {
-                return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
-            });
-        }; break;
-    }
 })
 
 
@@ -169,25 +152,6 @@ const closeModal = (type: string, event: any) => {
                         Автор
                     </label>
                 </div>
-
-                <!-- <div class="select-inputs">
-                    <select v-model="selectedGenre">
-                        <option disabled value="">Выбрать жанр</option>
-                        <option v-for="(item) in genres" :value="item">{{ item }}</option>
-                    </select>
-
-                    <select v-model="selectedAuthor">
-                        <option disabled value="">Выбрать автора</option>
-                        <option v-for="(item) in authors" :value="item">{{ item }}</option>
-                    </select>
-                </div> -->
-                <!-- <div class="select-inputs">
-                    <select v-model="sortByDate">
-                        <option disabled value="">Сортировка по датам</option>
-                        <option value="bycreate">По созданию</option>
-                        <option value="byupdate">По обновлению</option>
-                    </select>
-                </div> -->
             </div>
 
             <div class="card-container">

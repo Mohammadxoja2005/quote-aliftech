@@ -5,9 +5,7 @@ import { useStore } from "vuex";
 
 const store = useStore();
 
-const selectedGenre = ref<string>('');
-const selectedAuthor = ref<string>('');
-const selectedChoice = ref<string>('quote');
+const selectLabel = ref<string>('quote');
 const searchInput = ref<string>('');
 
 const quote = ref<string>('')
@@ -44,19 +42,14 @@ watchEffect(() => {
             })
 })
 
-// watch(() => {
-
-// })
-
-const searchByChoice = computed((type = 'quote') => {
-
-    if (type === 'quote') {
+const selectedQuoteSearch = computed(() => {
+    if (selectLabel.value === 'quote') {
         return quoteContext.quotes.filter((item: any) =>
             item.quote.toLowerCase().trim().includes(searchInput.value.toLowerCase().trim())
         )
     }
 
-    if (type === 'author') {
+    if (selectLabel.value === 'author') {
         return quoteContext.quotes.filter((item: any) =>
             item.author.toLowerCase().trim().includes(searchInput.value.toLowerCase().trim())
         )
@@ -130,21 +123,19 @@ const closeModal = (type: string, event: any) => {
 
                 <div class="radio-buttons">
                     <label>
-                        <input @click="searchByChoice('quote')" v-model="selectedChoice" type="radio" name="filter"
-                            value="quote">
+                        <input v-model="selectLabel" type="radio" name="filter" value="quote">
                         Цитата
                     </label>
 
                     <label>
-                        <input @click="searchByChoice('author')" v-model="selectedChoice" type="radio" name="filter"
-                            value="author">
+                        <input v-model="selectLabel" type="radio" name="filter" value="author">
                         Автор
                     </label>
                 </div>
             </div>
 
             <div class="card-container">
-                <div class="card" v-for="(item) in  searchByChoice " :key="item.id">
+                <div class="card" v-for="(item) in  selectedQuoteSearch" :key="item.id">
                     <div class="card-author">{{ item.author }}</div>
                     <div class="card-quote">{{ item.quote }}</div>
 

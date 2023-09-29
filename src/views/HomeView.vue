@@ -32,7 +32,6 @@ const quoteContext: any = reactive({
     authors: [],
     genres: [],
     quotes: [],
-    filteredQuotes: []
 })
 
 watchEffect(() => {
@@ -42,42 +41,26 @@ watchEffect(() => {
                 quoteContext.authors.push(...store.getters.getAuthors)
                 quoteContext.genres.push(...store.getters.getGenres)
                 quoteContext.quotes.push(...store.getters.getQuotes);
-                quoteContext.filteredQuotes.push(...store.getters.getQuotes);
             })
 })
 
-const searchByChoice = computed(() => {
+// watch(() => {
 
-    switch (selectedChoice.value) {
-        case 'quote': {
-            quoteContext.quotes = quoteContext.filteredQuotes.filter((item: any) => item.quote.toLowerCase().trim().includes(searchInput.value.toLowerCase().trim()))
-        }; break;
-        case 'author': {
-            quoteContext.quotes = quoteContext.filteredQuotes.filter((item: any) => item.author.toLowerCase().trim().includes(searchInput.value.toLowerCase().trim()))
-        }; break;
+// })
 
-        default: console.log("nothing worked");
+const searchByChoice = computed((type = 'quote') => {
+
+    if (type === 'quote') {
+        return quoteContext.quotes.filter((item: any) =>
+            item.quote.toLowerCase().trim().includes(searchInput.value.toLowerCase().trim())
+        )
     }
 
-    const filtered = quoteContext.quotes.filter((item: any) => {
-        // Check search text
-        const searchTextMatch =
-            searchInput.value === '' ||
-            item.quote.toLowerCase().includes(searchInput.value.toLowerCase()) ||
-            item.author.toLowerCase().includes(searchInput.value.toLowerCase())
-
-        // Check author filter
-        const authorFilterMatch =
-            selectedAuthor.value === '' || item.author === selectedAuthor.value
-
-        // Check genre filter
-        const genreFilterMatch =
-            selectedGenre.value === '' || item.genre === selectedGenre.value
-
-        return searchTextMatch && authorFilterMatch && genreFilterMatch
-    })
-
-    return filtered;
+    if (type === 'author') {
+        return quoteContext.quotes.filter((item: any) =>
+            item.author.toLowerCase().trim().includes(searchInput.value.toLowerCase().trim())
+        )
+    }
 })
 
 const openModal = (object: any, type: string, event: any) => {
@@ -113,6 +96,11 @@ const closeModal = (type: string, event: any) => {
     }
 
     if (type === 'edit') {
+
+        // quoteContext.quotes.filter((quote: any) => {
+
+        // })
+
         store.dispatch('updateQuote', quoteData)
             .then(() => {
                 window.location.reload();
@@ -142,12 +130,14 @@ const closeModal = (type: string, event: any) => {
 
                 <div class="radio-buttons">
                     <label>
-                        <input v-model="selectedChoice" type="radio" name="filter" value="quote">
+                        <input @click="searchByChoice('quote')" v-model="selectedChoice" type="radio" name="filter"
+                            value="quote">
                         Цитата
                     </label>
 
                     <label>
-                        <input v-model="selectedChoice" type="radio" name="filter" value="author">
+                        <input @click="searchByChoice('author')" v-model="selectedChoice" type="radio" name="filter"
+                            value="author">
                         Автор
                     </label>
                 </div>
@@ -222,8 +212,6 @@ const closeModal = (type: string, event: any) => {
 </template>
   
 <style scoped>
-/* modal part */
-
 .form-container {
     display: flex;
     flex-direction: column;

@@ -16,8 +16,10 @@ const quote = ref<string>('')
 const author = ref<string>('');
 const genre = ref<number>();
 
-let modalDeletesShow = ref<boolean>(false);
-let modalUpdateShow = ref<boolean>(false);
+const quoteModal: any = reactive({
+    isModalUpdateShow: false,
+    isModalDeleteShow: false
+})
 
 const quoteData: any = reactive({
     id: '',
@@ -109,12 +111,12 @@ const openModal = (object: any, type: string, event: any) => {
     quoteData.updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
     if (type === "edit") {
-        modalUpdateShow.value = true;
+        quoteModal.isModalUpdateShow = true;
         return;
     }
 
     if (type === "delete") {
-        modalDeletesShow.value = true;
+        quoteModal.isModalDeleteShow = true;
         return;
     }
 }
@@ -123,8 +125,8 @@ const closeModal = (type: string, event: any) => {
     event.preventDefault();
 
     if (type === 'close') {
-        modalDeletesShow.value = false;
-        modalUpdateShow.value = false;
+        quoteModal.isModalDeleteShow = false;
+        quoteModal.isModalUpdateShow = false;
         return;
     }
 
@@ -139,7 +141,7 @@ const closeModal = (type: string, event: any) => {
     if (type === 'delete') {
         store.dispatch('deleteQuote', quoteData.id)
             .then(() => {
-                window.location.reload();
+                quoteModal.isModalDeleteShow = false;
             })
         return;
     }
@@ -215,7 +217,7 @@ const closeModal = (type: string, event: any) => {
         </div>
     </form>
 
-    <div class="modal-container" v-if="modalDeletesShow">
+    <div class="modal-container" v-if="quoteModal.isModalDeleteShow">
         <div class="modal">
             <div class="modal-header">
                 <h2>Are you sure about deleting data?</h2>
@@ -228,7 +230,7 @@ const closeModal = (type: string, event: any) => {
         </div>
     </div>
 
-    <div class="modal-container" v-if="modalUpdateShow">
+    <div class="modal-container" v-if="quoteModal.isModalUpdateShow">
 
         <form>
             <div class="form-container">

@@ -80,7 +80,6 @@ const searchByChoice = computed(() => {
     return filtered;
 })
 
-
 const openModal = (object: any, type: string, event: any) => {
     event.preventDefault();
 
@@ -155,7 +154,7 @@ const closeModal = (type: string, event: any) => {
             </div>
 
             <div class="card-container">
-                <div class="card" v-for="(item, index) in  searchByChoice " :key="index">
+                <div class="card" v-for="(item) in  searchByChoice " :key="item.id">
                     <div class="card-author">{{ item.author }}</div>
                     <div class="card-quote">{{ item.quote }}</div>
 

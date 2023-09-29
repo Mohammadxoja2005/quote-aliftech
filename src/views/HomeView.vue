@@ -1,30 +1,14 @@
 <script setup lang="ts">
-import { computed, watchEffect, reactive, ref, watch } from "vue";
+import { computed, watchEffect, reactive, ref } from "vue";
 import { RouterLink } from 'vue-router'
 import { useStore } from "vuex";
+import UpdateModal, { actions as updateActions, getData as updateGetData } from "@/components/UpdateModal.vue";
+import DeleteModal, { actions as deleteActions, getData as deleteGetData } from "@/components/DeleteModal.vue";
 
 const store = useStore();
 
 const selectLabel = ref<string>('quote');
 const searchInput = ref<string>('');
-
-const quote = ref<string>('')
-const author = ref<string>('');
-const genre = ref<number>();
-
-const quoteModal: any = reactive({
-    isModalUpdateShow: false,
-    isModalDeleteShow: false
-})
-
-const quoteData: any = reactive({
-    id: '',
-    quote: '',
-    author: '',
-    genre: '',
-    createdAt: '',
-    updatedAt: ''
-})
 
 const quoteContext: any = reactive({
     authors: [],
@@ -56,56 +40,18 @@ const selectedQuoteSearch = computed(() => {
     }
 })
 
-const openModal = (object: any, type: string, event: any) => {
+const actions = (object: any, type: string, event: any) => {
     event.preventDefault();
 
-    const { id, quote, author, genre, createdAt } = object;
-
-    quoteData.id = id;
-    quoteData.quote = quote;
-    quoteData.author = author;
-    quoteData.genre = genre;
-    quoteData.createdAt = createdAt;
-    quoteData.updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
-
     if (type === "edit") {
-        quoteModal.isModalUpdateShow = true;
+        updateActions('open');
+        updateGetData(object);
         return;
     }
 
     if (type === "delete") {
-        quoteModal.isModalDeleteShow = true;
-        return;
-    }
-}
-
-const closeModal = (type: string, event: any) => {
-    event.preventDefault();
-
-    if (type === 'close') {
-        quoteModal.isModalDeleteShow = false;
-        quoteModal.isModalUpdateShow = false;
-        return;
-    }
-
-    if (type === 'edit') {
-
-        // quoteContext.quotes.filter((quote: any) => {
-
-        // })
-
-        store.dispatch('updateQuote', quoteData)
-            .then(() => {
-                window.location.reload();
-            })
-        return;
-    }
-
-    if (type === 'delete') {
-        store.dispatch('deleteQuote', quoteData.id)
-            .then(() => {
-                quoteModal.isModalDeleteShow = false;
-            })
+        deleteActions('open');
+        deleteGetData(object);
         return;
     }
 }
@@ -153,53 +99,16 @@ const closeModal = (type: string, event: any) => {
 
                     <div class="card-btns">
                         <button class="card-see">Смотреть детали</button>
-                        <button class="card-delete" @click="openModal(item, 'delete', $event)">Удалить цитату</button>
-                        <button class="card-update" @click="openModal(item, 'edit', $event)">Редактировать цитату</button>
+                        <button class="card-delete" @click="actions(item, 'delete', $event)">Удалить цитату</button>
+                        <button class="card-update" @click="actions(item, 'edit', $event)">Редактировать цитату</button>
                     </div>
                 </div>
             </div>
         </div>
     </form>
 
-    <div class="modal-container" v-if="quoteModal.isModalDeleteShow">
-        <div class="modal">
-            <div class="modal-header">
-                <h2>Are you sure about deleting data?</h2>
-                <button @click="closeModal('close', $event)">X</button>
-            </div>
-            <div class="modal-footer">
-                <button @click="closeModal('delete', $event)">Удалить</button>
-                <button @click="closeModal('close', $event)">Закрыть</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-container" v-if="quoteModal.isModalUpdateShow">
-
-        <form>
-            <div class="form-container">
-                <div class="input-container">
-                    <label for="quote" class="label">Текст цитаты:</label>
-                    <input type="text" v-model="quote" id="quote" class="input" placeholder="Введите текст цитаты">
-                </div>
-                <div class="input-container">
-                    <label for="author" class="label">Автор цитаты:</label>
-                    <input type="text" v-model="author" id="author" class="input" placeholder="Введите автора цитаты">
-                </div>
-
-                <div class="input-container">
-                    <label for="genre" class="label">Жанр:</label>
-                    <select v-model="genre" id="genre" class="input">
-                        <option disabled value="">Выберите один жанр</option>
-                        <option v-for="( item ) in  quoteContext.genres " :value="item">{{ item }}</option>
-                    </select>
-                </div>
-
-                <button @click="closeModal('edit', $event)" class="button">Обновить цитату</button>
-                <button @click="closeModal('close', $event)" class="button">Закрыть</button>
-            </div>
-        </form>
-    </div>
+    <UpdateModal />
+    <DeleteModal />
 </template>
   
 <style scoped>

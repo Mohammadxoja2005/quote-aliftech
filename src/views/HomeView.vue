@@ -18,29 +18,31 @@ const genre = ref<number>();
 
 let modalDeletesShow = ref<boolean>(false);
 let modalUpdateShow = ref<boolean>(false);
-let deleteId = ref<number | undefined>();
-let updateId = ref<number | undefined>();
-let createdAt = ref<string | undefined>('');
 
-const now = new Date();
-const date: string = now.toISOString().slice(0, 19).replace('T', ' ');
+const quoteData: any = reactive({
+    id: '',
+    quote: '',
+    author: '',
+    genre: '',
+    createdAt: '',
+    updatedAt: ''
+})
 
-const quoteDetails: any = reactive({
+const quoteContext: any = reactive({
     authors: [],
     genres: [],
     quotes: [],
     filteredQuotes: []
 })
 
-
 watchEffect(() => {
     Promise.all([store.dispatch('getAuthors'), store.dispatch("getGenresOfQuote"), store.dispatch('getQuotes')])
         .then(
             () => {
-                quoteDetails.authors.push(...store.getters.getAuthors)
-                quoteDetails.genres.push(...store.getters.getGenres)
-                quoteDetails.quotes.push(...store.getters.getQuotes);
-                quoteDetails.filteredQuotes.push(...store.getters.getQuotes);
+                quoteContext.authors.push(...store.getters.getAuthors)
+                quoteContext.genres.push(...store.getters.getGenres)
+                quoteContext.quotes.push(...store.getters.getQuotes);
+                quoteContext.filteredQuotes.push(...store.getters.getQuotes);
             })
 })
 
@@ -48,16 +50,16 @@ const searchByChoice = computed(() => {
 
     switch (selectedChoice.value) {
         case 'quote': {
-            quoteDetails.quotes = quoteDetails.filteredQuotes.filter((item: any) => item.quote.toLowerCase().trim().includes(searchInput.value.toLowerCase().trim()))
+            quoteContext.quotes = quoteContext.filteredQuotes.filter((item: any) => item.quote.toLowerCase().trim().includes(searchInput.value.toLowerCase().trim()))
         }; break;
         case 'author': {
-            quoteDetails.quotes = quoteDetails.filteredQuotes.filter((item: any) => item.author.toLowerCase().trim().includes(searchInput.value.toLowerCase().trim()))
+            quoteContext.quotes = quoteContext.filteredQuotes.filter((item: any) => item.author.toLowerCase().trim().includes(searchInput.value.toLowerCase().trim()))
         }; break;
 
         default: console.log("nothing worked");
     }
 
-    const filtered = quoteDetails.quotes.filter((item: any) => {
+    const filtered = quoteContext.quotes.filter((item: any) => {
         // Check search text
         const searchTextMatch =
             searchInput.value === '' ||
@@ -91,52 +93,56 @@ watch(sortByDate, () => {
             });
         }; break;
     }
-    console.log(searchByChoice.value);
 })
 
-const openModalDelete = (id: number, event: any) => {
-    event.preventDefault();
-    modalDeletesShow.value = true;
-    deleteId.value = id;
-}
 
-const openModalUpdate = (id: number, createdAtReg: string, event: any) => {
-    event.preventDefault();
-    modalUpdateShow.value = true;
-    updateId.value = id;
-    createdAt.value = createdAtReg;
-}
-
-const closeModal = (event: any) => {
-    event.preventDefault();
-    modalDeletesShow.value = false;
-    modalUpdateShow.value = false;
-}
-
-const deleteQuote = (event: any) => {
+const openModal = (object: any, type: string, event: any) => {
     event.preventDefault();
 
-    store.dispatch('deleteQuote', deleteId.value)
-        .then(() => {
-            window.location.reload();
-        })
-}
+    const { id, quote, author, genre, createdAt } = object;
 
-const updateQuote = (event: any) => {
-    event.preventDefault();
+    quoteData.id = id;
+    quoteData.quote = quote;
+    quoteData.author = author;
+    quoteData.genre = genre;
+    quoteData.createdAt = createdAt;
+    quoteData.updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-    const updateQuoteObject = {
-        id: updateId.value,
-        quote: quote.value,
-        author: author.value,
-        genre: genre.value,
-        createdAt: createdAt.value,
-        updatedAt: date,
+    if (type === "edit") {
+        modalUpdateShow.value = true;
+        return;
     }
-    store.dispatch('updateQuote', updateQuoteObject)
-        .then(() => {
-            window.location.reload();
-        })
+
+    if (type === "delete") {
+        modalDeletesShow.value = true;
+        return;
+    }
+}
+
+const closeModal = (type: string, event: any) => {
+    event.preventDefault();
+
+    if (type === 'close') {
+        modalDeletesShow.value = false;
+        modalUpdateShow.value = false;
+        return;
+    }
+
+    if (type === 'edit') {
+        store.dispatch('updateQuote', quoteData)
+            .then(() => {
+                window.location.reload();
+            })
+        return;
+    }
+
+    if (type === 'delete') {
+        store.dispatch('deleteQuote', quoteData.id)
+            .then(() => {
+                window.location.reload();
+            })
+        return;
+    }
 }
 
 </script>
@@ -146,7 +152,6 @@ const updateQuote = (event: any) => {
         <div class="form-container">
             <div class="form-inputs">
                 <router-link to="/create" class="create-link"><button>создать цитату</button></router-link>
-                <!-- <router-link to="/random" class="create-link"><button>сделать рандомную цитату</button></router-link> -->
                 <div class="search-input">
                     <input type="text" v-model="searchInput" placeholder="Поиск...">
                 </div>
@@ -201,10 +206,9 @@ const updateQuote = (event: any) => {
                     </div>
 
                     <div class="card-btns">
-                        <!-- <button class="card-see">See details</button> -->
-                        <button class="card-delete" @click="openModalDelete(item.id, $event)">Удалить цитату</button>
-                        <button class="card-update" @click="openModalUpdate(item.id, item.createdAt, $event)">Обновить
-                            цитату</button>
+                        <button class="card-see">Смотреть детали</button>
+                        <button class="card-delete" @click="openModal(item, 'delete', $event)">Удалить цитату</button>
+                        <button class="card-update" @click="openModal(item, 'edit', $event)">Редактировать цитату</button>
                     </div>
                 </div>
             </div>
@@ -215,11 +219,11 @@ const updateQuote = (event: any) => {
         <div class="modal">
             <div class="modal-header">
                 <h2>Are you sure about deleting data?</h2>
-                <button @click="closeModal($event)">X</button>
+                <button @click="closeModal('close', $event)">X</button>
             </div>
             <div class="modal-footer">
-                <button @click="deleteQuote($event)">Удалить</button>
-                <button @click="closeModal($event)">Закрыть</button>
+                <button @click="closeModal('delete', $event)">Удалить</button>
+                <button @click="closeModal('close', $event)">Закрыть</button>
             </div>
         </div>
     </div>
@@ -241,12 +245,12 @@ const updateQuote = (event: any) => {
                     <label for="genre" class="label">Жанр:</label>
                     <select v-model="genre" id="genre" class="input">
                         <option disabled value="">Выберите один жанр</option>
-                        <option v-for="( item ) in  quoteDetails.genres " :value="item">{{ item }}</option>
+                        <option v-for="( item ) in  quoteContext.genres " :value="item">{{ item }}</option>
                     </select>
                 </div>
 
-                <button @click="updateQuote($event)" class="button">Обновить цитату</button>
-                <button @click="closeModal($event)" class="button">Закрыть</button>
+                <button @click="closeModal('edit', $event)" class="button">Обновить цитату</button>
+                <button @click="closeModal('close', $event)" class="button">Закрыть</button>
             </div>
         </form>
     </div>

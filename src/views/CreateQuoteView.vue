@@ -1,33 +1,33 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { reactive } from 'vue';
 import { RouterLink } from 'vue-router'
 import { useStore } from "vuex";
+import { uuid } from 'vue-uuid';
 
 const store = useStore();
 
-const now = new Date();
-const date: string = now.toISOString().slice(0, 19).replace('T', ' ');
+const state: any = reactive({
+    id: '',
+    quote: '',
+    author: '',
+    genre: '',
+    createdAt: '',
+    updatedAt: ''
+})
 
-const genres = computed(() => store.getters.getGenres);
-const selectedGenre = ref<string>('');
-const quote = ref<string>('');
-const author = ref<string>(''); 
-
-const onSubmit = (event: any): void => {
+const handleSubmit = (event: any): void => {
     event.preventDefault();
 
-    if (author.value === '' || quote.value == '') {
+    state.id = uuid.v4();
+    state.createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    state.updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+
+    if (state.author === '' || state.quote == '') {
         alert('автор и цитата не может быть пустым')
         return;
     }
 
-    store.dispatch('createQuote', {
-        author: author.value,
-        quote: quote.value,
-        genre: selectedGenre.value,
-        createdAt: date,
-        updatedAt: date
-    }).then(() => {
+    store.dispatch('createQuote', state).then(() => {
         window.location.reload();
     })
 }
@@ -38,22 +38,20 @@ const onSubmit = (event: any): void => {
         <div class="form-container">
             <div class="input-container">
                 <label for="quote">Текст цитаты:</label>
-                <input type="text" v-model="quote" id="quote" placeholder="Введите текст цитаты">
+                <input type="text" v-model="state.quote" id="quote" placeholder="Введите текст цитаты">
             </div>
+
             <div class="input-container">
                 <label for="author">Автор цитаты:</label>
-                <input type="text" v-model="author" id="author" placeholder="Введите автора цитаты">
+                <input type="text" v-model="state.author" id="author" placeholder="Введите автора цитаты">
             </div>
 
             <div class="input-container">
-                <label for="genre">Жанр:</label>
-                <select v-model="selectedGenre" id="genre">
-                    <option disabled value="">Выберите один жанр</option>
-                    <option v-for="(item) in genres" :value="item">{{ item }}</option>
-                </select>
+                <label for="genre" class="label">Жанры:</label>
+                <input type="text" v-model="state.genre" id="author" class="input" placeholder="old, motivational">
             </div>
 
-            <button @click="onSubmit($event)">Создать цитату</button>
+            <button @click="handleSubmit($event)">Создать цитату</button>
             <router-link to="/" class=""><button>Пойти в основеую страницу</button></router-link>
         </div>
     </form>

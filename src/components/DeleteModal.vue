@@ -1,13 +1,13 @@
 <script lang="ts">
 import { reactive } from "vue";
 import { useStore } from "vuex";
-import { toggleModal } from "@/utils/toggleModal";
+import { VisibilityHandler } from "@/utils/VisibilityHandler";
 
 const state = reactive({
     id: ''
 });
 
-export const actions = new toggleModal();
+export const actions = new VisibilityHandler();
 
 export const getData = (object: any) => {
     state.id = object.id
@@ -19,15 +19,16 @@ export default {
         const store = useStore();
 
         const handleSubmit = () => {
-
+            store.dispatch('deleteQuote', state.id)
+            actions.close();
         }
 
         return {
             actions,
+            handleSubmit
         }
     }
 }
-
 </script> 
 
 <template>
@@ -35,11 +36,11 @@ export default {
         <div class="modal">
             <div class="modal-header">
                 <h2>Are you sure about deleting data?</h2>
-                <button @click="actions.close()">X</button>
+                <button class="button" @click="actions.close()">X</button>
             </div>
             <div class="modal-footer">
-                <button>Удалить</button>
-                <button @click="actions.close()">Закрыть</button>
+                <div class="button" @click="handleSubmit()">Удалить</div>
+                <div class="button" @click="actions.close()">Закрыть</div>
             </div>
         </div>
     </div>
@@ -79,4 +80,16 @@ export default {
      justify-content: flex-end;
      gap: 10px;
  }
-</style>
+
+ .button {
+     padding: 0.5rem;
+     border-radius: 5px;
+     border: none;
+     background-color: #007aff;
+     color: #fff;
+     font-size: 1rem;
+     cursor: pointer;
+     transition: background-color 0.2s ease-in-out;
+     text-align: center;
+ }
+</style>@/utils/VisibilityHandler

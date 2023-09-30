@@ -1,6 +1,6 @@
 import { ref } from "vue";
 
-export class toggleModal {
+export class VisibilityHandler {
     isHide = ref(false);
 
     constructor() {

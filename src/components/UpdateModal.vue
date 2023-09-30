@@ -1,7 +1,7 @@
 <script lang="ts">
 import { reactive } from 'vue';
 import { useStore } from "vuex";
-import { toggleModal } from "@/utils/toggleModal";
+import { VisibilityHandler } from "@/utils/VisibilityHandler";
 
 const state: any = reactive({
     id: '',
@@ -12,7 +12,7 @@ const state: any = reactive({
     updatedAt: ''
 })
 
-export const actions = new toggleModal();
+export const actions = new VisibilityHandler();
 
 export const getData = (object: any) => {
     const { id, quote, author, genre, createdAt } = object;
@@ -31,8 +31,8 @@ export default {
         const store = useStore();
 
         const handleSubmit = () => {
-            console.log(state);
-            // store.dispatch('updateQuote',);
+            store.dispatch('updateQuote', state);
+            actions.close();
         }
 
         return {
@@ -118,4 +118,4 @@ export default {
  .button:hover {
      background-color: #0062cc;
  }
-</style>
+</style>@/utils/VisibilityHandler

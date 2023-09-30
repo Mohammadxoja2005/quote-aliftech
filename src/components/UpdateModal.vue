@@ -1,7 +1,7 @@
 <script lang="ts">
 import { reactive } from 'vue';
 import { useStore } from "vuex";
-import { toggleModal } from "../utils/toggleModal.vue";
+import { toggleModal } from "@/utils/toggleModal";
 
 const quoteContext: any = reactive({
     quote: '',

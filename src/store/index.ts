@@ -1,9 +1,9 @@
 import { createStore } from 'vuex';
 import quotes from './modules/quotes';
 
-const store = createStore({ 
+const store = createStore({
     modules: {
-        quotes: quotes
+        quotes: quotes,
     }
 });
 

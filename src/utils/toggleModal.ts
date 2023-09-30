@@ -1,4 +1,3 @@
-<script lang="ts">
 import { ref } from "vue";
 
 export class toggleModal {
@@ -16,4 +15,3 @@ export class toggleModal {
         this.isHide.value = false;
     }
 }
-</script>

@@ -1,14 +1,16 @@
 <script lang="ts">
-import { ref } from "vue";
+import { reactive } from "vue";
 import { useStore } from "vuex";
 import { toggleModal } from "@/utils/toggleModal";
 
-const id = ref<number>();
+const state = reactive({
+    id: ''
+});
 
 export const actions = new toggleModal();
 
 export const getData = (object: any) => {
-    id.value = object.id
+    state.id = object.id
 }
 
 export default {

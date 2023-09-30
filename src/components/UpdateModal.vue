@@ -3,13 +3,7 @@ import { reactive } from 'vue';
 import { useStore } from "vuex";
 import { toggleModal } from "@/utils/toggleModal";
 
-const quoteContext: any = reactive({
-    quote: '',
-    author: '',
-    genre: ''
-})
-
-const quoteData: any = reactive({
+const state: any = reactive({
     id: '',
     quote: '',
     author: '',
@@ -23,12 +17,12 @@ export const actions = new toggleModal();
 export const getData = (object: any) => {
     const { id, quote, author, genre, createdAt } = object;
 
-    quoteData.id = id;
-    quoteData.quote = quote;
-    quoteData.author = author;
-    quoteData.genre = genre;
-    quoteData.createdAt = createdAt;
-    quoteData.updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    state.id = id;
+    state.quote = quote;
+    state.author = author;
+    state.genre = genre;
+    state.createdAt = createdAt;
+    state.updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
 }
 
 export default {
@@ -37,13 +31,14 @@ export default {
         const store = useStore();
 
         const handleSubmit = () => {
+            console.log(state);
             // store.dispatch('updateQuote',);
         }
 
         return {
             actions,
             handleSubmit,
-            quoteContext
+            state
         }
     }
 }
@@ -56,24 +51,22 @@ export default {
             <div class="form-container">
                 <div class="input-container">
                     <label for="quote" class="label">Текст цитаты:</label>
-                    <input type="text" v-model="quoteContext.quote" id="quote" class="input"
-                        placeholder="Введите текст цитаты">
+                    <input type="text" v-model="state.quote" id="quote" class="input" placeholder="Введите текст цитаты">
                 </div>
                 <div class="input-container">
                     <label for="author" class="label">Автор цитаты:</label>
-                    <input type="text" v-model="quoteContext.author" id="author" class="input"
-                        placeholder="Введите автора цитаты">
+                    <input type="text" v-model="state.author" id="author" class="input" placeholder="Введите автора цитаты">
                 </div>
 
                 <div class="input-container">
                     <label for="genre" class="label">Жанр:</label>
-                    <select v-model="quoteContext.genre" id="genre" class="input">
+                    <select v-model="state.genre" id="genre" class="input">
                         <option disabled value="">Выберите один жанр</option>
-                        <!-- <option v-for="( item ) in  quoteContext.genres " :value="item">{{ item }}</option> -->
+                        <!-- <option v-for="( item ) in  state.genres " :value="item">{{ item }}</option> -->
                     </select>
                 </div>
 
-                <button class="button">Обновить цитату</button>
+                <div @click="handleSubmit()" class="button">Обновить цитату</div>
                 <div @click="() => actions.close()" class="button">Закрыть</div>
             </div>
         </form>
@@ -119,6 +112,7 @@ export default {
      font-size: 1rem;
      cursor: pointer;
      transition: background-color 0.2s ease-in-out;
+     text-align: center;
  }
 
  .button:hover {

@@ -86,7 +86,21 @@ export default {
     </div>
 </template> 
 
-<style scoped> .form-container {
+<style scoped> .modal-container {
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     background-color: rgba(0, 0, 0, 0.5);
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     font-size: 24px;
+     color: white;
+ }
+
+ .form-container {
      display: flex;
      flex-direction: column;
      gap: 1rem;

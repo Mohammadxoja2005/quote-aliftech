@@ -31,7 +31,7 @@ export default {
                 console.log(error)
             } finally {
                 emitter.emit('triggerQuote');
-                LoaderActions.open();
+                LoaderActions.close();
                 actions.close();
             }
         }

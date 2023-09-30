@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, watchEffect, reactive, ref } from "vue";
+import { computed, watchEffect, reactive } from "vue";
 import { RouterLink } from 'vue-router'
 import { useStore } from "vuex";
 import UpdateModal, { actions as updateActions, getData as updateGetData } from "@/components/UpdateModal.vue";
@@ -7,35 +7,29 @@ import DeleteModal, { actions as deleteActions, getData as deleteGetData } from 
 
 const store = useStore();
 
-const selectLabel = ref<string>('quote');
-const searchInput = ref<string>('');
-
-const quoteContext: any = reactive({
-    authors: [],
-    genres: [],
+const state: any = reactive({
     quotes: [],
+    selectLabel: "quote",
+    searchInput: ""
 })
 
 watchEffect(() => {
-    Promise.all([store.dispatch('getAuthors'), store.dispatch("getGenresOfQuote"), store.dispatch('getQuotes')])
-        .then(
-            () => {
-                quoteContext.authors.push(...store.getters.getAuthors)
-                quoteContext.genres.push(...store.getters.getGenres)
-                quoteContext.quotes.push(...store.getters.getQuotes);
-            })
+    store.dispatch('getQuotes')
+        .then(() => {
+            state.quotes.push(...store.getters.getQuotes);
+        })
 })
 
 const selectedQuoteSearch = computed(() => {
-    if (selectLabel.value === 'quote') {
-        return quoteContext.quotes.filter((item: any) =>
-            item.quote.toLowerCase().trim().includes(searchInput.value.toLowerCase().trim())
+    if (state.selectLabel === 'quote') {
+        return state.quotes.filter((item: any) =>
+            item.quote.toLowerCase().trim().includes(state.searchInput.toLowerCase().trim())
         )
     }
 
-    if (selectLabel.value === 'author') {
-        return quoteContext.quotes.filter((item: any) =>
-            item.author.toLowerCase().trim().includes(searchInput.value.toLowerCase().trim())
+    if (state.selectLabel === 'author') {
+        return state.quotes.filter((item: any) =>
+            item.author.toLowerCase().trim().includes(state.searchInput.toLowerCase().trim())
         )
     }
 })
@@ -64,17 +58,17 @@ const actions = (object: any, type: string, event: any) => {
             <div class="form-inputs">
                 <router-link to="/create" class="create-link"><button>создать цитату</button></router-link>
                 <div class="search-input">
-                    <input type="text" v-model="searchInput" placeholder="Поиск...">
+                    <input type="text" v-model="state.searchInput" placeholder="Поиск...">
                 </div>
 
                 <div class="radio-buttons">
                     <label>
-                        <input v-model="selectLabel" type="radio" name="filter" value="quote">
+                        <input v-model="state.selectLabel" type="radio" name="filter" value="quote">
                         Цитата
                     </label>
 
                     <label>
-                        <input v-model="selectLabel" type="radio" name="filter" value="author">
+                        <input v-model="state.selectLabel" type="radio" name="filter" value="author">
                         Автор
                     </label>
                 </div>

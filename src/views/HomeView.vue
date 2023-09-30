@@ -4,6 +4,7 @@ import { RouterLink } from 'vue-router'
 import { useStore } from "vuex";
 import UpdateModal, { actions as updateActions, getData as updateGetData } from "@/components/UpdateModal.vue";
 import DeleteModal, { actions as deleteActions, getData as deleteGetData } from "@/components/DeleteModal.vue";
+import Loader, { actions as LoaderActions } from "@/components/Loader.vue"
 import mitt from 'mitt'
 
 export const emitter = mitt()
@@ -12,7 +13,8 @@ export default {
     name: "HomeView",
     components: {
         'update-modal': UpdateModal,
-        'delete-modal': DeleteModal
+        'delete-modal': DeleteModal,
+        'loader': Loader
     },
     setup() {
         const store = useStore();
@@ -23,14 +25,23 @@ export default {
             searchInput: ""
         })
 
-        const fetchQuotes = () => {
-            store.dispatch('getQuotes')
+        const fetchQuotes = async () => {
+            await store.dispatch('getQuotes')
                 .then(() => {
                     state.quotes = store.getters.getQuotes;
                 })
         }
 
-        onMounted(fetchQuotes);
+        onMounted(async () => {
+            LoaderActions.open();
+            try {
+                await fetchQuotes()
+            } catch (error) {
+                console.log(error);
+            } finally {
+                LoaderActions.close();
+            }
+        });
 
         emitter.on("triggerQuote", fetchQuotes)
 
@@ -76,6 +87,7 @@ export default {
 
 <template>
     <form>
+        <loader />
         <div class="form-container">
             <div class="form-inputs">
                 <router-link to="/create" class="create-link"><button>создать цитату</button></router-link>

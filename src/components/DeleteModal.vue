@@ -2,6 +2,7 @@
 import { reactive } from "vue";
 import { useStore } from "vuex";
 import { VisibilityHandler } from "@/utils/VisibilityHandler";
+import { emitter } from "@/views/HomeView.vue";
 
 const state = reactive({
     id: ''
@@ -18,9 +19,17 @@ export default {
     setup() {
         const store = useStore();
 
-        const handleSubmit = () => {
-            store.dispatch('deleteQuote', state.id)
-            actions.close();
+        const handleSubmit = async () => {
+            console.log("loading started and opened")
+            try {
+                await store.dispatch('deleteQuote', state.id)
+            } catch (error) {
+                console.log(error)
+            } finally { 
+                console.log("loading ends")
+                emitter.emit('triggerQuote');
+                actions.close();
+            }
         }
 
         return {

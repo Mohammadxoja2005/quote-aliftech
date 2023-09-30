@@ -1,52 +1,74 @@
-<script setup lang="ts">
-import { computed, watchEffect, reactive } from "vue";
+<script lang="ts">
+import { computed, reactive, onMounted } from "vue";
 import { RouterLink } from 'vue-router'
 import { useStore } from "vuex";
 import UpdateModal, { actions as updateActions, getData as updateGetData } from "@/components/UpdateModal.vue";
 import DeleteModal, { actions as deleteActions, getData as deleteGetData } from "@/components/DeleteModal.vue";
+import mitt from 'mitt'
 
-const store = useStore();
+export const emitter = mitt()
 
-const state: any = reactive({
-    quotes: [],
-    selectLabel: "quote",
-    searchInput: ""
-})
+export default {
+    name: "HomeView",
+    components: {
+        'update-modal': UpdateModal,
+        'delete-modal': DeleteModal
+    },
+    setup() {
+        const store = useStore();
 
-watchEffect(() => {
-    store.dispatch('getQuotes')
-        .then(() => {
-            state.quotes.push(...store.getters.getQuotes);
+        const state: any = reactive({
+            quotes: [],
+            selectLabel: "quote",
+            searchInput: ""
         })
-})
 
-const selectedQuoteSearch = computed(() => {
-    if (state.selectLabel === 'quote') {
-        return state.quotes.filter((item: any) =>
-            item.quote.toLowerCase().trim().includes(state.searchInput.toLowerCase().trim())
-        )
-    }
+        const fetchQuotes = () => {
+            store.dispatch('getQuotes')
+                .then(() => {
+                    state.quotes = store.getters.getQuotes;
+                })
+        }
 
-    if (state.selectLabel === 'author') {
-        return state.quotes.filter((item: any) =>
-            item.author.toLowerCase().trim().includes(state.searchInput.toLowerCase().trim())
-        )
-    }
-})
+        onMounted(fetchQuotes);
 
-const actions = (object: any, type: string, event: any) => {
-    event.preventDefault();
+        emitter.on("triggerQuote", fetchQuotes)
 
-    if (type === "edit") {
-        updateActions.open();
-        updateGetData(object);
-        return;
-    }
+        const selectedQuoteSearch = computed(() => {
+            if (state.selectLabel === 'quote') {
+                return state.quotes.filter((item: any) =>
+                    item.quote.toLowerCase().trim().includes(state.searchInput.toLowerCase().trim())
+                )
+            }
 
-    if (type === "delete") {
-        deleteActions.open();
-        deleteGetData(object);
-        return;
+            if (state.selectLabel === 'author') {
+                return state.quotes.filter((item: any) =>
+                    item.author.toLowerCase().trim().includes(state.searchInput.toLowerCase().trim())
+                )
+            }
+        })
+
+        const actions = (object: any, type: string, event: any) => {
+            event.preventDefault();
+
+            if (type === "edit") {
+                updateActions.open();
+                updateGetData(object);
+                return;
+            }
+
+            if (type === "delete") {
+                deleteActions.open();
+                deleteGetData(object);
+                return;
+            }
+        } 
+        
+        return {
+            state,
+            selectedQuoteSearch,
+            actions
+        }
     }
 }
 
@@ -101,8 +123,8 @@ const actions = (object: any, type: string, event: any) => {
         </div>
     </form>
 
-    <UpdateModal />
-    <DeleteModal />
+    <update-modal />
+    <delete-modal />
 </template>
   
 <style scoped>

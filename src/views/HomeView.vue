@@ -180,25 +180,6 @@ export default {
         align-items: center;
         padding: 2rem;
     }
-
-    .input-container {
-        flex-direction: row;
-        align-items: center;
-    }
-
-    .label {
-        font-size: 1.5rem;
-    }
-
-    .input {
-        width: 100%;
-        max-width: 300px;
-    }
-
-    .button {
-        padding: 0.75rem 1.5rem;
-        font-size: 1.2rem;
-    }
 }
 
 
@@ -268,20 +249,6 @@ button {
     margin-right: 0.5rem;
 }
 
-.select-inputs {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1rem;
-}
-
-.select-inputs select {
-    padding: 0.5rem;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    margin-right: 1rem;
-}
-
 .card-container {
     display: flex;
     flex-wrap: wrap;
@@ -340,67 +307,5 @@ button {
 .card-update {
     background-color: orange;
 }
-
-
-.modal-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal {
-    background-color: #fff;
-    padding: 1rem;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    max-width: 90%;
-    max-height: 90%;
-    overflow: auto;
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-}
-
-.modal-header h2 {
-    margin: 0;
-}
-
-.modal-header button {
-    background-color: transparent;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-}
-
-.modal-body {
-    margin-bottom: 1rem;
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
-.modal-footer button {
-    background-color: #0099ff;
-    color: #fff;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    padding: 0.5rem 1rem;
-}
-
-/* modal update part */
 </style>
 

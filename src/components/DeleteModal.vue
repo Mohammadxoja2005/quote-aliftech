@@ -106,4 +106,4 @@ export default {
      transition: background-color 0.2s ease-in-out;
      text-align: center;
  }
-</style>@/utils/VisibilityHandler
+</style>

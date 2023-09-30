@@ -62,8 +62,8 @@ export default {
                 deleteGetData(object);
                 return;
             }
-        } 
-        
+        }
+
         return {
             state,
             selectedQuoteSearch,

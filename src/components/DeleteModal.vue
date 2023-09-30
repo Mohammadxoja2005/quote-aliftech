@@ -3,6 +3,7 @@ import { reactive } from "vue";
 import { useStore } from "vuex";
 import { VisibilityHandler } from "@/utils/VisibilityHandler";
 import { emitter } from "@/views/HomeView.vue";
+import Loader, { actions as LoaderActions } from "../components/Loader.vue";
 
 const state = reactive({
     id: ''
@@ -16,18 +17,21 @@ export const getData = (object: any) => {
 
 export default {
     name: "DeleteModal",
+    components: {
+        'loader': Loader
+    },
     setup() {
         const store = useStore();
 
         const handleSubmit = async () => {
-            console.log("loading started and opened")
+            LoaderActions.open();
             try {
                 await store.dispatch('deleteQuote', state.id)
             } catch (error) {
                 console.log(error)
-            } finally { 
-                console.log("loading ends")
+            } finally {
                 emitter.emit('triggerQuote');
+                LoaderActions.open();
                 actions.close();
             }
         }
@@ -42,6 +46,7 @@ export default {
 
 <template>
     <div class="modal-container" v-if="actions.isHide.value">
+        <loader />
         <div class="modal">
             <div class="modal-header">
                 <h2>Are you sure about deleting data?</h2>

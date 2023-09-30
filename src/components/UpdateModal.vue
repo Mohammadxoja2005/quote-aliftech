@@ -3,6 +3,7 @@ import { reactive } from 'vue';
 import { useStore } from "vuex";
 import { VisibilityHandler } from "@/utils/VisibilityHandler";
 import { emitter } from '@/views/HomeView.vue';
+import Loader, { actions as LoaderActions } from "../components/Loader.vue";
 
 const state: any = reactive({
     id: '',
@@ -28,18 +29,21 @@ export const getData = (object: any) => {
 
 export default {
     name: "UpdateModal",
+    components: {
+        'loader': Loader
+    },
     setup() {
         const store = useStore();
 
         const handleSubmit = async () => {
-            console.log("loading started and opened")
+            LoaderActions.open();
             try {
                 await store.dispatch('updateQuote', state);
             } catch (error) {
                 console.log(error)
             } finally {
-                console.log("loading ends")
                 emitter.emit('triggerQuote');
+                LoaderActions.close();
                 actions.close();
             }
         }
@@ -55,7 +59,7 @@ export default {
 
 <template>
     <div class="modal-container" v-if="actions.isHide.value">
-
+        <loader />
         <form>
             <div class="form-container">
                 <div class="input-container">
@@ -127,4 +131,4 @@ export default {
  .button:hover {
      background-color: #0062cc;
  }
-</style>@/utils/VisibilityHandler
+</style>

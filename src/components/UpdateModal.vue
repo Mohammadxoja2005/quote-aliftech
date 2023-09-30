@@ -72,12 +72,18 @@ export default {
                 </div>
 
                 <div class="input-container">
+                    <label for="author" class="label">Жанры:</label>
+                    <input type="text" v-model="state.genre" id="author" class="input" placeholder="Введите автора цитаты">
+                </div>
+
+                <!-- <div class="input-container">
                     <label for="genre" class="label">Жанр:</label>
                     <select v-model="state.genre" id="genre" class="input">
                         <option disabled value="">Выберите один жанр</option>
-                        <!-- <option v-for="( item ) in  state.genres " :value="item">{{ item }}</option> -->
-                    </select>
-                </div>
+                        <option v-for="( item ) in  state.genres " :value="item">{{ item }}</option>
+                    </select>  
+                    
+                </div> -->
 
                 <div @click="handleSubmit()" class="button">Обновить цитату</div>
                 <div @click="() => actions.close()" class="button">Закрыть</div>

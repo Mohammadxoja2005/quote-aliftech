@@ -104,7 +104,7 @@ export default {
                     <div class="card-container-updates">
                         Genre:
                         <div class="card-genre" v-for="(genre, index) in item.genre.split(',')" :key="index">
-                            {{ genre }}
+                            <p class="card-genre-text">{{ genre }}</p>
                         </div>
                     </div>
 
@@ -288,6 +288,10 @@ button {
 .card-genre {
     font-size: 0.9rem;
     margin-bottom: 0.5rem;
+}
+
+.card-genre-text {
+    max-width: 100px;
 }
 
 .card-updated {

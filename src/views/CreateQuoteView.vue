@@ -11,7 +11,7 @@ const date: string = now.toISOString().slice(0, 19).replace('T', ' ');
 const genres = computed(() => store.getters.getGenres);
 const selectedGenre = ref<string>('');
 const quote = ref<string>('');
-const author = ref<string>('');
+const author = ref<string>(''); 
 
 const onSubmit = (event: any): void => {
     event.preventDefault();

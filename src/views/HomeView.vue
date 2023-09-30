@@ -44,13 +44,13 @@ const actions = (object: any, type: string, event: any) => {
     event.preventDefault();
 
     if (type === "edit") {
-        updateActions('open');
+        updateActions.open();
         updateGetData(object);
         return;
     }
 
     if (type === "delete") {
-        deleteActions('open');
+        deleteActions.open();
         deleteGetData(object);
         return;
     }

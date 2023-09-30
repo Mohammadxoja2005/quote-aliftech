@@ -1,13 +1,13 @@
 <script lang="ts">
-import { ref, reactive } from 'vue';
+import { reactive } from 'vue';
 import { useStore } from "vuex";
+import { toggleModal } from "../utils/toggleModal.vue";
 
-const store = useStore();
-
-const isShow = ref<boolean>(false);
-const quote = ref<string>('')
-const author = ref<string>('');
-const genre = ref<number>();
+const quoteContext: any = reactive({
+    quote: '',
+    author: '',
+    genre: ''
+})
 
 const quoteData: any = reactive({
     id: '',
@@ -18,6 +18,7 @@ const quoteData: any = reactive({
     updatedAt: ''
 })
 
+export const actions = new toggleModal();
 
 export const getData = (object: any) => {
     const { id, quote, author, genre, createdAt } = object;
@@ -28,65 +29,52 @@ export const getData = (object: any) => {
     quoteData.genre = genre;
     quoteData.createdAt = createdAt;
     quoteData.updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
-
-}
-
-export const actions = (type: string) => {
-
-    if (type === 'open') {
-        isShow.value = true;
-        return;
-    }
-
-    if (type === 'close') {
-        isShow.value = false;
-        return;
-    }
-
-    if (type === 'edit') {
-        return;
-    }
 }
 
 export default {
     name: "UpdateModal",
     setup() {
+        const store = useStore();
+
+        const handleSubmit = () => {
+            // store.dispatch('updateQuote',);
+        }
+
         return {
-            isShow,
             actions,
-            quote,
-            genre,
-            author
+            handleSubmit,
+            quoteContext
         }
     }
 }
-
 </script>
 
 <template>
-    <div class="modal-container" v-if="isShow">
+    <div class="modal-container" v-if="actions.isHide.value">
 
         <form>
             <div class="form-container">
                 <div class="input-container">
                     <label for="quote" class="label">Текст цитаты:</label>
-                    <input type="text" v-model="quote" id="quote" class="input" placeholder="Введите текст цитаты">
+                    <input type="text" v-model="quoteContext.quote" id="quote" class="input"
+                        placeholder="Введите текст цитаты">
                 </div>
                 <div class="input-container">
                     <label for="author" class="label">Автор цитаты:</label>
-                    <input type="text" v-model="author" id="author" class="input" placeholder="Введите автора цитаты">
+                    <input type="text" v-model="quoteContext.author" id="author" class="input"
+                        placeholder="Введите автора цитаты">
                 </div>
 
                 <div class="input-container">
                     <label for="genre" class="label">Жанр:</label>
-                    <select v-model="genre" id="genre" class="input">
+                    <select v-model="quoteContext.genre" id="genre" class="input">
                         <option disabled value="">Выберите один жанр</option>
                         <!-- <option v-for="( item ) in  quoteContext.genres " :value="item">{{ item }}</option> -->
                     </select>
                 </div>
 
-                <button @click="actions('edit')" class="button">Обновить цитату</button>
-                <button @click="actions('close')" class="button">Закрыть</button>
+                <button class="button">Обновить цитату</button>
+                <div @click="() => actions.close()" class="button">Закрыть</div>
             </div>
         </form>
     </div>

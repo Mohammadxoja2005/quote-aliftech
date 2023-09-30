@@ -1,35 +1,27 @@
 <script lang="ts">
 import { ref } from "vue";
+import { useStore } from "vuex";
+import { toggleModal } from "@/utils/toggleModal.vue";
 
-const isShow = ref<boolean>(false);
 const id = ref<number>();
+
+export const actions = new toggleModal();
 
 export const getData = (object: any) => {
     id.value = object.id
 }
 
-export const actions = (type: string) => {
-    if (type === 'open') {
-        isShow.value = true;
-        return;
-    }
-
-    if (type === 'close') {
-        isShow.value = false;
-        return;
-    }
-
-    if (type === 'delete') {
-        return;
-    }
-}
-
 export default {
     name: "DeleteModal",
     setup() {
+        const store = useStore();
+
+        const handleSubmit = () => {
+
+        }
+
         return {
             actions,
-            isShow
         }
     }
 }
@@ -37,19 +29,19 @@ export default {
 </script> 
 
 <template>
-    <div class="modal-container" v-if="isShow">
+    <div class="modal-container" v-if="actions.isHide.value">
         <div class="modal">
             <div class="modal-header">
                 <h2>Are you sure about deleting data?</h2>
-                <button @click="actions('close')">X</button>
+                <button @click="actions.close()">X</button>
             </div>
             <div class="modal-footer">
-                <button @click="actions('delete')">Удалить</button>
-                <button @click="actions('close')">Закрыть</button>
+                <button>Удалить</button>
+                <button @click="actions.close()">Закрыть</button>
             </div>
         </div>
     </div>
-</template> 
+</template>
 
 <style scoped> .modal-container {
      position: fixed;

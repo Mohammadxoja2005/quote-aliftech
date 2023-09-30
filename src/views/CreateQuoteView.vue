@@ -1,40 +1,67 @@
-<script setup lang="ts">
+<script lang="ts">
 import { reactive } from 'vue';
 import { RouterLink } from 'vue-router'
 import { useStore } from "vuex";
 import { uuid } from 'vue-uuid';
+import Loader, { actions as LoaderActions } from "@/components/Loader.vue";
 
-const store = useStore();
+export default {
+    name: "CreateQuoteView",
+    components: {
+        loader: Loader
+    },
+    setup() {
+        const store = useStore();
 
-const state: any = reactive({
-    id: '',
-    quote: '',
-    author: '',
-    genre: '',
-    createdAt: '',
-    updatedAt: ''
-})
+        const state: any = reactive({
+            id: '',
+            quote: '',
+            author: '',
+            genre: '',
+            createdAt: '',
+            updatedAt: ''
+        })
 
-const handleSubmit = (event: any): void => {
-    event.preventDefault();
+        const handleSubmit = async (event: any) => {
+            event.preventDefault();
 
-    state.id = uuid.v4();
-    state.createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    state.updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+            state.id = uuid.v4();
+            state.createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
+            state.updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-    if (state.author === '' || state.quote == '') {
-        alert('автор и цитата не может быть пустым')
-        return;
+            if (state.author === '' || state.quote == '') {
+                alert('автор и цитата не может быть пустым')
+                return;
+            }
+
+            LoaderActions.open();
+
+            try {
+                await store.dispatch('createQuote', state)
+            } catch (error) {
+                console.log(error);
+            } finally {
+                LoaderActions.close();
+                state.id = "",
+                    state.quote = "",
+                    state.author = "",
+                    state.genre = "",
+                    state.createdAt = "",
+                    state.updatedAt = ""
+            }
+        }
+
+        return {
+            state,
+            handleSubmit
+        }
     }
-
-    store.dispatch('createQuote', state).then(() => {
-        window.location.reload();
-    })
 }
 
 </script>
 <template>
     <form>
+        <loader />
         <div class="form-container">
             <div class="input-container">
                 <label for="quote">Текст цитаты:</label>

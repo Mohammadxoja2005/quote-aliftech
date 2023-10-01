@@ -15,22 +15,22 @@ export default {
 
 <template>
     <div class="modal-container" v-if="actions.isHide.value">
-        Загрузка...
+        <h1> Загрузка... </h1>
     </div>
 </template> 
 
 <style scoped>
 .modal-container {
     position: fixed;
+    z-index: 5;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 24px;
-    color: white;
 }
 </style>

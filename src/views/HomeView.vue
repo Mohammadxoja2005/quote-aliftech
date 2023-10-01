@@ -6,6 +6,7 @@ import UpdateModal, { actions as updateActions, getData as updateGetData } from 
 import DeleteModal, { actions as deleteActions, getData as deleteGetData } from "@/components/DeleteModal.vue";
 import Loader, { actions as LoaderActions } from "@/components/Loader.vue"
 import ErrorPage, { actions as ErrorActions, textActions as ErrorText } from "@/components/ErrorPage.vue";
+import type { IQuote } from "@/models";
 import mitt from 'mitt'
 
 export const emitter = mitt()
@@ -21,7 +22,11 @@ export default {
     setup() {
         const store = useStore();
 
-        const state: any = reactive({
+        const state: {
+            quotes: Array<IQuote>,
+            selectLabel: string,
+            searchInput: string
+        } = reactive({
             quotes: [],
             selectLabel: "quote",
             searchInput: ""
@@ -50,19 +55,19 @@ export default {
 
         const selectedQuoteSearch = computed(() => {
             if (state.selectLabel === 'quote') {
-                return state.quotes.filter((item: any) =>
+                return state.quotes.filter((item) =>
                     item.quote.toLowerCase().trim().includes(state.searchInput.toLowerCase().trim())
                 )
             }
 
             if (state.selectLabel === 'author') {
-                return state.quotes.filter((item: any) =>
+                return state.quotes.filter((item) =>
                     item.author.toLowerCase().trim().includes(state.searchInput.toLowerCase().trim())
                 )
             }
         })
 
-        const actions = (object: any, type: string, event: any) => {
+        const actions = (object: IQuote, type: string, event: MouseEvent) => {
             event.preventDefault();
 
             if (type === "edit") {
@@ -335,3 +340,4 @@ export default {
  }
 </style>
 
+@/models/Quote

@@ -1,22 +1,26 @@
 import axios from 'axios';
+import type { IQuote } from '@/models';
 
-const state = {
+const state: {
+    quotes: Array<IQuote>,
+    singleQuote: Partial<IQuote>
+} = {
     quotes: [],
-    singleQuote: []
+    singleQuote: {}
 }
 
 const mutations = {
-    SET_QUOTES(state: any, payload: any) {
+    SET_QUOTES(state: { quotes: Array<IQuote> }, payload: Array<IQuote>) {
         state.quotes = payload;
     },
 
-    SET_SINGLE_QUOTE(state: any, payload: any) {
+    SET_SINGLE_QUOTE(state: { singleQuote: IQuote }, payload: IQuote) {
         state.singleQuote = payload;
     }
 }
 
 const actions = {
-    async createQuote({ commit }: any, quotes: { author: string, quote: string, genre: string, createdAt: string, updatedAt: string }) {
+    async createQuote({ commit }: any, quotes: IQuote) {
 
         try {
             await axios.post('https://backend-aliftech.onrender.com/quotes', quotes)
@@ -28,7 +32,7 @@ const actions = {
     async getSingleQuote({ commit }: any, id: string) {
         try {
             await axios.get(`https://backend-aliftech.onrender.com/quotes/${id}`)
-                .then((response: any) => {
+                .then((response) => {
                     commit("SET_SINGLE_QUOTE", response.data);
                 })
         } catch (error) {
@@ -39,7 +43,7 @@ const actions = {
     async getQuotes({ commit }: any) {
         try {
             await axios.get('https://backend-aliftech.onrender.com/quotes')
-                .then((response: any) => {
+                .then((response) => {
                     commit("SET_QUOTES", response.data);
                 })
         } catch (error) {
@@ -47,7 +51,7 @@ const actions = {
         }
     },
 
-    async updateQuote({ commit }: any, quote: { id: number, author: string, quote: string, genre: string, updatedAt: string }) {
+    async updateQuote({ commit }: any, quote: IQuote) {
 
         try {
             await axios.put(`https://backend-aliftech.onrender.com/quotes/${quote.id}`, quote)
@@ -66,8 +70,8 @@ const actions = {
 }
 
 const getters = {
-    getQuotes: (state: any) => state.quotes,
-    getSingleQuote: (state: any) => state.singleQuote
+    getQuotes: (state: { quotes: Array<IQuote> }) => state.quotes,
+    getSingleQuote: (state: { singleQuote: IQuote }) => state.singleQuote
 }
 
 export default {

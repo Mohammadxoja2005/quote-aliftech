@@ -16,7 +16,7 @@ export default {
 
 <template>
     <div v-if="actions.isHide.value">
-        <h1>Что-то пошло не так...</h1>
+        <h1>Что-то пошло не так... Пожалйуста проверьте интернет</h1>
     </div>
 </template> 
 

@@ -47,7 +47,7 @@ const actions = {
         }
     },
 
-    async updateQuote(quote: { id: number, author: string, quote: string, genre: string, updatedAt: string }) {
+    async updateQuote({ commit }: any, quote: { id: number, author: string, quote: string, genre: string, updatedAt: string }) {
 
         try {
             await axios.put(`https://backend-aliftech.onrender.com/quotes/${quote.id}`, quote)
@@ -56,7 +56,7 @@ const actions = {
         }
     },
 
-    async deleteQuote(id: number) {
+    async deleteQuote({ commit }: any, id: number) {
         try {
             await axios.delete(`https://backend-aliftech.onrender.com/quotes/${id}`)
         } catch (error) {

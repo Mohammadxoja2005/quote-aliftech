@@ -4,6 +4,7 @@ import { useStore } from "vuex";
 import { VisibilityHandler } from "@/utils/VisibilityHandler";
 import { emitter } from '@/views/HomeView.vue';
 import Loader, { actions as LoaderActions } from "../components/Loader.vue";
+import ErrorPage, { actions as ErrorActions } from "@/components/ErrorPage.vue";
 
 const state: any = reactive({
     id: '',
@@ -30,7 +31,8 @@ export const getData = (object: any) => {
 export default {
     name: "UpdateModal",
     components: {
-        'loader': Loader
+        'loader': Loader,
+        'error-page': ErrorPage
     },
     setup() {
         const store = useStore();
@@ -40,7 +42,7 @@ export default {
             try {
                 await store.dispatch('updateQuote', state);
             } catch (error) {
-                console.log(error)
+                ErrorActions.open();
             } finally {
                 emitter.emit('triggerQuote');
                 LoaderActions.close();
@@ -60,6 +62,7 @@ export default {
 <template>
     <div class="modal-container" v-if="actions.isHide.value">
         <loader />
+        <error-page />
         <form>
             <div class="form-container">
                 <div class="input-container">

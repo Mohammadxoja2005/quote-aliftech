@@ -5,6 +5,7 @@ import { useStore } from "vuex";
 import UpdateModal, { actions as updateActions, getData as updateGetData } from "@/components/UpdateModal.vue";
 import DeleteModal, { actions as deleteActions, getData as deleteGetData } from "@/components/DeleteModal.vue";
 import Loader, { actions as LoaderActions } from "@/components/Loader.vue"
+import ErrorPage, { actions as ErrorActions } from "@/components/ErrorPage.vue";
 import mitt from 'mitt'
 
 export const emitter = mitt()
@@ -14,7 +15,8 @@ export default {
     components: {
         'update-modal': UpdateModal,
         'delete-modal': DeleteModal,
-        'loader': Loader
+        'loader': Loader,
+        'error-page': ErrorPage
     },
     setup() {
         const store = useStore();
@@ -37,7 +39,7 @@ export default {
             try {
                 await fetchQuotes()
             } catch (error) {
-                console.log(error);
+                ErrorActions.open();
             } finally {
                 LoaderActions.close();
             }
@@ -88,6 +90,7 @@ export default {
 <template>
     <form>
         <loader />
+        <error-page />
         <div class="form-container">
             <div class="form-inputs">
                 <router-link to="/create" class="create-link"><button>создать цитату</button></router-link>

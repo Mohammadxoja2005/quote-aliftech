@@ -4,6 +4,7 @@ import { useStore } from "vuex";
 import { VisibilityHandler } from "@/utils/VisibilityHandler";
 import { emitter } from "@/views/HomeView.vue";
 import Loader, { actions as LoaderActions } from "../components/Loader.vue";
+import ErrorPage, { actions as ErrorActions } from "@/components/ErrorPage.vue";
 
 const state = reactive({
     id: ''
@@ -13,12 +14,14 @@ export const actions = new VisibilityHandler();
 
 export const getData = (object: any) => {
     state.id = object.id
+    console.log(state);
 }
 
 export default {
     name: "DeleteModal",
     components: {
-        'loader': Loader
+        'loader': Loader,
+        'error-page': ErrorPage
     },
     setup() {
         const store = useStore();
@@ -28,7 +31,7 @@ export default {
             try {
                 await store.dispatch('deleteQuote', state.id)
             } catch (error) {
-                console.log(error)
+                ErrorActions.open()
             } finally {
                 emitter.emit('triggerQuote');
                 LoaderActions.close();
@@ -47,6 +50,7 @@ export default {
 <template>
     <div class="modal-container" v-if="actions.isHide.value">
         <loader />
+        <error-page />
         <div class="modal">
             <div class="modal-header">
                 <h2>Are you sure about deleting data?</h2>

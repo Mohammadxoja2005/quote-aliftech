@@ -10,17 +10,16 @@ import mitt from 'mitt'
 
 export const emitter = mitt()
 
-export default {
+export default { 
     name: "HomeView",
     components: {
         'update-modal': UpdateModal,
         'delete-modal': DeleteModal,
         'loader': Loader,
         'error-page': ErrorPage
-    },
+    }, 
     setup() {
-        const store = useStore();
-
+        const store = useStore(); 
         const state: {
             quotes: Array<IQuote>,
             selectLabel: string,

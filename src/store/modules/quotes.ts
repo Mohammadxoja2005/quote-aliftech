@@ -20,8 +20,7 @@ const mutations = {
 }
 
 const actions = {
-    async createQuote({ commit }: any, quotes: IQuote) {
-
+    async createQuote({ commit }: { commit: Function }, quotes: IQuote) {
         try {
             await axios.post('https://backend-aliftech.onrender.com/quotes', quotes)
         } catch (error) {
@@ -29,7 +28,7 @@ const actions = {
         }
     },
 
-    async getSingleQuote({ commit }: any, id: string) {
+    async getSingleQuote({ commit }: { commit: Function }, id: string) {
         try {
             await axios.get(`https://backend-aliftech.onrender.com/quotes/${id}`)
                 .then((response) => {
@@ -40,7 +39,7 @@ const actions = {
         }
     },
 
-    async getQuotes({ commit }: any) {
+    async getQuotes({ commit }: { commit: Function }) {
         try {
             await axios.get('https://backend-aliftech.onrender.com/quotes')
                 .then((response) => {
@@ -51,7 +50,7 @@ const actions = {
         }
     },
 
-    async updateQuote({ commit }: any, quote: IQuote) {
+    async updateQuote({ commit }: { commit: Function }, quote: IQuote) {
 
         try {
             await axios.put(`https://backend-aliftech.onrender.com/quotes/${quote.id}`, quote)
@@ -60,7 +59,7 @@ const actions = {
         }
     },
 
-    async deleteQuote({ commit }: any, id: number) {
+    async deleteQuote({ commit }: { commit: Function }, id: number) {
         try {
             await axios.delete(`https://backend-aliftech.onrender.com/quotes/${id}`)
         } catch (error) {

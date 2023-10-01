@@ -91,20 +91,14 @@ export default {
         <div class="form-container">
             <div class="form-inputs">
                 <router-link to="/create" class="create-link"><button>создать цитату</button></router-link>
-                <div class="search-input">
-                    <input type="text" v-model="state.searchInput" placeholder="Поиск...">
-                </div>
-
-                <div class="radio-buttons">
-                    <label>
-                        <input v-model="state.selectLabel" type="radio" name="filter" value="quote">
-                        Цитата
-                    </label>
-
-                    <label>
-                        <input v-model="state.selectLabel" type="radio" name="filter" value="author">
-                        Автор
-                    </label>
+                <div class="search-container">
+                    <div class="search-input">
+                        <input type="text" v-model="state.searchInput" placeholder="Поиск...">
+                    </div>
+                    <select class="search-options" v-model="state.selectLabel" name="options">
+                        <option value="quote">Цитата</option>
+                        <option value="author">Автор</option>
+                    </select>
                 </div>
             </div>
 
@@ -139,189 +133,199 @@ export default {
     <delete-modal />
 </template>
   
-<style scoped>
-.form-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin: 0 auto;
-    max-width: 600px;
-    padding: 1rem;
-    background-color: #f5f5f5;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
+<style scoped> .search-container {
+     display: flex;
+     align-items: center;
+ }
 
-.input-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
+ .search-options {
+     padding: 0.5rem;
+     border: none;
+     border-radius: 5px;
+     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+ }
 
-.label {
-    font-size: 1.2rem;
-    font-weight: bold;
-}
+ .form-container {
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+     margin: 0 auto;
+     max-width: 600px;
+     padding: 1rem;
+     background-color: #f5f5f5;
+     border-radius: 10px;
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+ }
 
-.input {
-    padding: 0.5rem;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 1rem;
-}
+ .input-container {
+     display: flex;
+     flex-direction: column;
+     gap: 0.5rem;
+ }
 
-.button {
-    padding: 0.5rem;
-    border-radius: 5px;
-    border: none;
-    background-color: #007aff;
-    color: #fff;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-}
+ .label {
+     font-size: 1.2rem;
+     font-weight: bold;
+ }
 
-.button:hover {
-    background-color: #0062cc;
-}
+ .input {
+     padding: 0.5rem;
+     border-radius: 5px;
+     border: 1px solid #ccc;
+     font-size: 1rem;
+ }
 
-@media screen and (min-width: 768px) {
-    .form-container {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        padding: 2rem;
-    }
-}
+ .button {
+     padding: 0.5rem;
+     border-radius: 5px;
+     border: none;
+     background-color: #007aff;
+     color: #fff;
+     font-size: 1rem;
+     cursor: pointer;
+     transition: background-color 0.2s ease-in-out;
+ }
+
+ .button:hover {
+     background-color: #0062cc;
+ }
+
+ @media screen and (min-width: 768px) {
+     .form-container {
+         flex-direction: row;
+         justify-content: space-between;
+         align-items: center;
+         padding: 2rem;
+     }
+ }
 
 
-.create-link {
-    margin-bottom: 10px;
-}
+ .create-link {
+     margin-bottom: 10px;
+ }
 
-.form-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+ .form-container {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+ }
 
-.form-inputs {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 1rem;
-}
+ .form-inputs {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     margin-bottom: 1rem;
+ }
 
-.search-input {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-}
+ .search-input {
+     display: flex;
+     align-items: center;
+ }
 
-.search-input input {
-    margin-right: 1rem;
-    padding: 0.5rem;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
+ .search-input input {
+     margin-right: 1rem;
+     padding: 0.5rem;
+     border: none;
+     border-radius: 5px;
+     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+ }
 
-.search-input button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 5px;
-    background-color: #0099ff;
-    color: #fff;
-    cursor: pointer;
-}
+ .search-input button {
+     padding: 0.5rem 1rem;
+     border: none;
+     border-radius: 5px;
+     background-color: #0099ff;
+     color: #fff;
+     cursor: pointer;
+ }
 
-button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 5px;
-    background-color: #0099ff;
-    color: #fff;
-    cursor: pointer;
-}
+ button {
+     padding: 0.5rem 1rem;
+     border: none;
+     border-radius: 5px;
+     background-color: #0099ff;
+     color: #fff;
+     cursor: pointer;
+ }
 
-.radio-buttons {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1rem;
-}
+ .radio-buttons {
+     display: flex;
+     justify-content: center;
+     margin-bottom: 1rem;
+ }
 
-.radio-buttons label {
-    display: flex;
-    align-items: center;
-    margin-right: 1rem;
-    font-weight: bold;
-}
+ .radio-buttons label {
+     display: flex;
+     align-items: center;
+     margin-right: 1rem;
+     font-weight: bold;
+ }
 
-.radio-buttons input[type="radio"] {
-    margin-right: 0.5rem;
-}
+ .radio-buttons input[type="radio"] {
+     margin-right: 0.5rem;
+ }
 
-.card-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    flex-direction: column;
-}
+ .card-container {
+     display: flex;
+     flex-wrap: wrap;
+     justify-content: center;
+     flex-direction: column;
+ }
 
-.card-container-updates {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+ .card-container-updates {
+     display: flex;
+     align-items: center;
+     gap: 10px;
+ }
 
-.card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin: 0.5rem;
-    max-width: 300px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
+ .card {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     padding: 1rem;
+     border: 1px solid #ccc;
+     border-radius: 5px;
+     margin: 0.5rem;
+     max-width: 300px;
+     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+ }
 
-.card-author {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
+ .card-author {
+     font-size: 1.2rem;
+     font-weight: bold;
+     margin-bottom: 0.5rem;
+ }
 
-.card-quote {
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-}
+ .card-quote {
+     font-size: 1.1rem;
+     margin-bottom: 0.5rem;
+ }
 
-.card-genre {
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
-}
+ .card-genre {
+     font-size: 0.9rem;
+     margin-bottom: 0.5rem;
+ }
 
-.card-genre-text {
-    max-width: 100px;
-}
+ .card-genre-text {
+     max-width: 100px;
+ }
 
-.card-updated {
-    font-size: 0.8rem;
-    color: #999;
-}
+ .card-updated {
+     font-size: 0.8rem;
+     color: #999;
+ }
 
-.card-btns {
-    display: flex;
-    gap: 10px;
-}
+ .card-btns {
+     display: flex;
+     gap: 10px;
+ }
 
-.card-delete {
-    background-color: red;
-}
+ .card-delete {
+     background-color: red;
+ }
 
-.card-update {
-    background-color: orange;
-}
+ .card-update {
+     background-color: orange;
+ }
 </style>
 

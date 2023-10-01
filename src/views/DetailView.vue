@@ -3,7 +3,7 @@ import { onMounted, reactive } from 'vue';
 import Loader, { actions as LoaderActions } from "../components/Loader.vue";
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
-import ErrorPage, { actions as ErrorActions } from '@/components/ErrorPage.vue';
+import ErrorPage, { actions as ErrorActions, textActions as ErrorText } from '@/components/ErrorPage.vue';
 
 export default {
     name: "DefaultView",
@@ -35,8 +35,9 @@ export default {
                     state.createdAt = createdAt;
                     state.updatedAt = updatedAt;
                 })
-            } catch (error) {
+            } catch (error: any) {
                 ErrorActions.open();
+                ErrorText.setText(error.message);
             } finally {
                 LoaderActions.close();
             }

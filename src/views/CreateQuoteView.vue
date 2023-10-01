@@ -4,11 +4,13 @@ import { RouterLink } from 'vue-router'
 import { useStore } from "vuex";
 import { uuid } from 'vue-uuid';
 import Loader, { actions as LoaderActions } from "@/components/Loader.vue";
+import ErrorPage, { actions as ErrorActions, textActions as ErrorText } from '@/components/ErrorPage.vue';
 
 export default {
     name: "CreateQuoteView",
     components: {
-        loader: Loader
+        'loader': Loader,
+        'error-page': ErrorPage
     },
     setup() {
         const store = useStore();
@@ -37,8 +39,9 @@ export default {
             LoaderActions.open();
             try {
                 await store.dispatch('createQuote', state)
-            } catch (error) {
-                console.log(error);
+            } catch (error: any) {
+                ErrorActions.open();
+                ErrorText.setText(error.message)
             } finally {
                 LoaderActions.close();
                 state.id = "",
@@ -61,6 +64,7 @@ export default {
 <template>
     <form>
         <loader />
+        <error-page />
         <div class="form-container">
             <div class="input-container">
                 <label for="quote">Текст цитаты:</label>

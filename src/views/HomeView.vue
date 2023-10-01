@@ -5,7 +5,7 @@ import { useStore } from "vuex";
 import UpdateModal, { actions as updateActions, getData as updateGetData } from "@/components/UpdateModal.vue";
 import DeleteModal, { actions as deleteActions, getData as deleteGetData } from "@/components/DeleteModal.vue";
 import Loader, { actions as LoaderActions } from "@/components/Loader.vue"
-import ErrorPage, { actions as ErrorActions } from "@/components/ErrorPage.vue";
+import ErrorPage, { actions as ErrorActions, textActions as ErrorText } from "@/components/ErrorPage.vue";
 import mitt from 'mitt'
 
 export const emitter = mitt()
@@ -38,8 +38,9 @@ export default {
             LoaderActions.open();
             try {
                 await fetchQuotes()
-            } catch (error) {
+            } catch (error: any) {
                 ErrorActions.open();
+                ErrorText.setText(error.message)
             } finally {
                 LoaderActions.close();
             }

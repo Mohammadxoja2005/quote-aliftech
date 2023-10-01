@@ -4,7 +4,7 @@ import { useStore } from "vuex";
 import { VisibilityHandler } from "@/utils/VisibilityHandler";
 import { emitter } from "@/views/HomeView.vue";
 import Loader, { actions as LoaderActions } from "../components/Loader.vue";
-import ErrorPage, { actions as ErrorActions } from "@/components/ErrorPage.vue";
+import ErrorPage, { actions as ErrorActions, textActions as ErrorText } from "@/components/ErrorPage.vue";
 
 const state = reactive({
     id: ''
@@ -30,8 +30,9 @@ export default {
             LoaderActions.open();
             try {
                 await store.dispatch('deleteQuote', state.id)
-            } catch (error) {
+            } catch (error: any) {
                 ErrorActions.open()
+                ErrorText.setText(error.message);
             } finally {
                 emitter.emit('triggerQuote');
                 LoaderActions.close();

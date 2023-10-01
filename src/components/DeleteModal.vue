@@ -55,7 +55,7 @@ export default {
         <error-page />
         <div class="modal">
             <div class="modal-header">
-                <h2>Are you sure about deleting data?</h2>
+                <h2>Вы уверены что хотите удалить?</h2>
                 <button class="button" @click="actions.close()">X</button>
             </div>
             <div class="modal-footer">

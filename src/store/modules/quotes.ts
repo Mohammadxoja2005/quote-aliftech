@@ -28,7 +28,7 @@ const actions = {
         }
     },
 
-    async getSingleQuote({ commit }: { commit: Function }, id: string) {
+    async fetchSingleQuote({ commit }: { commit: Function }, id: string) {
         try {
             await axios.get(`https://backend-aliftech.onrender.com/quotes/${id}`)
                 .then((response) => {
@@ -39,7 +39,7 @@ const actions = {
         }
     },
 
-    async getQuotes({ commit }: { commit: Function }) {
+    async fetchQuotes({ commit }: { commit: Function }) {
         try {
             await axios.get('https://backend-aliftech.onrender.com/quotes')
                 .then((response) => {

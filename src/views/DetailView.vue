@@ -27,7 +27,7 @@ export default {
         onMounted(async () => {
             LoaderActions.open();
             try {
-                await store.dispatch('getSingleQuote', route.params.id).then(() => {
+                await store.dispatch('fetchSingleQuote', route.params.id).then(() => {
                     const { quote, author, genre, createdAt, updatedAt } = store.getters.getSingleQuote;
 
                     state.quote = quote;

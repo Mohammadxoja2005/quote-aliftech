@@ -33,7 +33,7 @@ export default {
         })
 
         const fetchQuotes = async () => {
-            await store.dispatch('getQuotes')
+            await store.dispatch('fetchQuotes')
                 .then(() => {
                     state.quotes = store.getters.getQuotes;
                 })

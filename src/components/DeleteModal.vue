@@ -1,11 +1,11 @@
 <script lang="ts">
-import { reactive } from "vue";
-import { useStore } from "vuex";
-import { VisibilityHandler } from "@/utils/VisibilityHandler";
-import { emitter } from "@/views/HomeView.vue";
-import Loader, { actions as LoaderActions } from "../components/Loader.vue";
-import ErrorPage, { actions as ErrorActions, textActions as ErrorText } from "@/components/ErrorPage.vue";
-import type { IQuote } from "@/models";
+import { reactive } from "vue"
+import { useStore } from "vuex"
+import { VisibilityHandler } from "@/utils/VisibilityHandler"
+import { emitter } from "@/views/HomeView.vue"
+import Loader, { actions as LoaderActions } from "../components/Loader.vue"
+import ErrorPage, { actions as ErrorActions, textActions as ErrorText } from "@/components/ErrorPage.vue"
+import type { IQuote } from "@/models"
 
 const state = reactive({
     id: ''
@@ -15,7 +15,6 @@ export const actions = new VisibilityHandler();
 
 export const getData = (object: IQuote) => {
     state.id = object.id
-    console.log(state);
 }
 
 export default {

@@ -1,6 +1,6 @@
 <script lang="ts">
 import { VisibilityHandler } from '@/utils/VisibilityHandler';
-import { TextHandler } from "@/utils/TextHandler"
+import { TextHandler } from "@/utils/TextHandler";
 
 export const actions = new VisibilityHandler();
 export const textActions = new TextHandler('Что-то пошло не так');

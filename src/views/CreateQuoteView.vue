@@ -1,6 +1,5 @@
 <script lang="ts">
 import { reactive } from 'vue';
-import { RouterLink } from 'vue-router'
 import { useStore } from "vuex";
 import { uuid } from 'vue-uuid';
 import Loader, { actions as LoaderActions } from "@/components/Loader.vue";

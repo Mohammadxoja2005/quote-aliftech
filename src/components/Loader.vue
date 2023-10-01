@@ -11,11 +11,12 @@ export default {
         }
     }
 }
+
 </script> 
 
 <template>
     <div class="modal-container" v-if="actions.isHide.value">
-        <h1> Загрузка... </h1>
+        <h3> Загрузка... </h3>
     </div>
 </template> 
 

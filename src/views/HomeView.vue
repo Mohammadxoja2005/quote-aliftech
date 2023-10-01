@@ -1,6 +1,5 @@
 <script lang="ts">
 import { computed, reactive, onMounted } from "vue";
-import { RouterLink } from 'vue-router'
 import { useStore } from "vuex";
 import UpdateModal, { actions as updateActions, getData as updateGetData } from "@/components/UpdateModal.vue";
 import DeleteModal, { actions as deleteActions, getData as deleteGetData } from "@/components/DeleteModal.vue";
@@ -65,6 +64,8 @@ export default {
                     item.author.toLowerCase().trim().includes(state.searchInput.toLowerCase().trim())
                 )
             }
+
+            return state.quotes;
         })
 
         const actions = (object: IQuote, type: string, event: MouseEvent) => {

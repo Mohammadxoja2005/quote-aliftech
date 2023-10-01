@@ -338,5 +338,3 @@ export default {
      background-color: orange;
  }
 </style>
-
-@/models/Quote

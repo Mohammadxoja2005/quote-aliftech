@@ -21,7 +21,7 @@ const actions = {
         try {
             await axios.post('https://backend-aliftech.onrender.com/quotes', quotes)
         } catch (error) {
-            throw new Error('API error');
+            throw new Error('Произошла ошибка при создании цитаты');
         }
     },
 
@@ -32,7 +32,7 @@ const actions = {
                     commit("SET_SINGLE_QUOTE", response.data);
                 })
         } catch (error) {
-            throw new Error('API error');
+            throw new Error('Произошла ошибка при получении цитаты.');
         }
     },
 
@@ -43,7 +43,7 @@ const actions = {
                     commit("SET_QUOTES", response.data);
                 })
         } catch (error) {
-            throw new Error('API error');
+            throw new Error('Произошла ошибка при получении цитат.');
         }
     },
 
@@ -52,7 +52,7 @@ const actions = {
         try {
             await axios.put(`https://backend-aliftech.onrender.com/quotes/${quote.id}`, quote)
         } catch (error) {
-            throw new Error('API error');
+            throw new Error('Произошла ошибка при обновлении цитаты.');
         }
     },
 
@@ -60,7 +60,7 @@ const actions = {
         try {
             await axios.delete(`https://backend-aliftech.onrender.com/quotes/${id}`)
         } catch (error) {
-            throw new Error('API error');
+            throw new Error('Произошла ошибка при удалении цитаты.');
         }
     }
 }

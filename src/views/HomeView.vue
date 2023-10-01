@@ -124,7 +124,9 @@ export default {
                     </div>
 
                     <div class="card-btns">
-                        <button class="card-see">Смотреть детали</button>
+                        <router-link class="card-see" :to="'/detail/' + item.id">
+                            <button>Смотреть детали</button>
+                        </router-link>
                         <button class="card-delete" @click="actions(item, 'delete', $event)">Удалить цитату</button>
                         <button class="card-update" @click="actions(item, 'edit', $event)">Редактировать цитату</button>
                     </div>

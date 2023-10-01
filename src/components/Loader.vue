@@ -15,7 +15,7 @@ export default {
 
 <template>
     <div class="modal-container" v-if="actions.isHide.value">
-        Loading...
+        Загрузка...
     </div>
 </template> 
 

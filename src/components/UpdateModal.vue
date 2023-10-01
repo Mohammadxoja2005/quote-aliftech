@@ -82,7 +82,7 @@ export default {
                 </div>
 
                 <div @click="handleSubmit()" class="button">Обновить цитату</div>
-                <div @click="() => actions.close()" class="button">Закрыть</div>
+                <div @click="actions.close()" class="button">Закрыть</div>
             </div>
         </form>
     </div>

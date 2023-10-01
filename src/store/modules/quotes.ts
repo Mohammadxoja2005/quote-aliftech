@@ -4,7 +4,8 @@ const state = {
     genres: [],
     quotes: [],
     authors: [],
-    randomQuotes: []
+    randomQuotes: [],
+    singleQuote: []
 }
 
 const mutations = {
@@ -22,6 +23,9 @@ const mutations = {
 
     SET_GENRES(state: any, payload: any) {
         state.genres = payload;
+    },
+    SET_SINGLE_QUOTE(state: any, payload: any) {
+        state.singleQuote = payload;
     }
 }
 
@@ -35,6 +39,17 @@ const actions = {
                 })
         } catch (error) {
             console.log(error);
+        }
+    },
+
+    async getSingleQuote({ commit }: any, id: string) {
+        try {
+            await axios.get(`https://backend-aliftech.onrender.com/quotes/${id}`)
+                .then((response: any) => {
+                    commit("SET_SINGLE_QUOTE", response.data);
+                })
+        } catch (error) {
+            console.log(error)
         }
     },
 
@@ -126,6 +141,7 @@ const getters = {
     getGenres: (state: any) => state.genres,
     getAuthors: (state: any) => state.authors,
     getRandomQuotes: (state: any) => state.randomQuotes,
+    getSingleQuote: (state: any) => state.singleQuote
 }
 
 export default {

@@ -1,83 +1,67 @@
 <script lang="ts">
-import { reactive } from 'vue';
-import { RouterLink } from 'vue-router'
-import { useStore } from "vuex";
-import { uuid } from 'vue-uuid';
-import Loader, { actions as LoaderActions } from "@/components/Loader.vue";
+import { onMounted, reactive } from 'vue';
+import Loader, { actions as LoaderActions } from "../components/Loader.vue";
+import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 
 export default {
-    name: "CreateQuoteView",
+    name: "DefaultView",
     components: {
-        loader: Loader
+        "loader": Loader
     },
     setup() {
         const store = useStore();
+        const route = useRoute();
 
         const state: any = reactive({
-            id: '',
-            quote: '',
-            author: '',
-            genre: '',
-            createdAt: '',
-            updatedAt: ''
+            quote: "",
+            author: "",
+            genre: "",
+            createdAt: "",
+            updatedAt: ""
         })
 
-        const handleSubmit = async (event: any) => {
-            event.preventDefault();
-
-            state.id = uuid.v4();
-            state.createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
-            state.updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
-
-            if (state.author === '' || state.quote == '') {
-                alert('автор и цитата не может быть пустым')
-                return;
-            }
-
+        onMounted(async () => {
             LoaderActions.open();
             try {
-                await store.dispatch('createQuote', state)
+                await store.dispatch('getSingleQuote', route.params.id).then(() => {
+                    const { quote, author, genre, createdAt, updatedAt } = store.getters.getSingleQuote;
+
+                    state.quote = quote;
+                    state.author = author;
+                    state.genre = genre;
+                    state.createdAt = createdAt;
+                    state.updatedAt = updatedAt;
+                })
             } catch (error) {
                 console.log(error);
             } finally {
                 LoaderActions.close();
-                state.id = "",
-                    state.quote = "",
-                    state.author = "",
-                    state.genre = "",
-                    state.createdAt = "",
-                    state.updatedAt = ""
             }
-        }
+        })
 
         return {
-            state,
-            handleSubmit
-        }
+            state
+        };
     }
 }
-
 </script>
+
 <template>
     <form>
         <loader />
         <div class="form-container">
             <div class="input-container">
-                <label for="quote">Текст цитаты:</label>
-                <input type="text" v-model="state.quote" id="quote" placeholder="Введите текст цитаты">
+                <label for="quote">Текст цитаты: {{ state.quote }}</label>
             </div>
 
             <div class="input-container">
-                <label for="author">Автор цитаты:</label>
-                <input type="text" v-model="state.author" id="author" placeholder="Введите автора цитаты">
+                <label for="author">Автор цитаты: {{ state.author }}</label>
             </div>
 
             <div class="input-container">
-                <label for="genre" class="label">Жанры:</label>
-                <input type="text" v-model="state.genre" id="author" class="input" placeholder="old, motivational">
+                <label for="genre" class="label">Жанры: {{ state.genre }}</label>
             </div>
-
-            <button @click="handleSubmit($event)">Создать цитату</button>
             <router-link to="/" class=""><button>Пойти в основеую страницу</button></router-link>
         </div>
     </form>
@@ -148,5 +132,3 @@ export default {
      }
  }
 </style>
-
-

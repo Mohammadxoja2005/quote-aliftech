@@ -1,9 +1,6 @@
 {
   "extends": "@vue/tsconfig/tsconfig.web.json",
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "src/**/*.ts"],
-  "files": [
-    "src/utils/toggleModal.ts"
-  ],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "composite": true,

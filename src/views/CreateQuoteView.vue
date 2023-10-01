@@ -45,6 +45,7 @@ export default {
                 ErrorText.setText(error.message)
             } finally {
                 LoaderActions.close();
+                alert("Успешно создано")
                 state.id = "",
                     state.quote = "",
                     state.author = "",
@@ -69,17 +70,17 @@ export default {
         <div class="form-container">
             <div class="input-container">
                 <label for="quote">Текст цитаты:</label>
-                <input type="text" v-model="state.quote" id="quote" placeholder="Введите текст цитаты">
+                <input required type="text" v-model="state.quote" id="quote" placeholder="Введите текст цитаты">
             </div>
 
             <div class="input-container">
                 <label for="author">Автор цитаты:</label>
-                <input type="text" v-model="state.author" id="author" placeholder="Введите автора цитаты">
+                <input required type="text" v-model="state.author" id="author" placeholder="Введите автора цитаты">
             </div>
 
             <div class="input-container">
                 <label for="genre" class="label">Жанры:</label>
-                <input type="text" v-model="state.genre" id="author" class="input" placeholder="old, motivational">
+                <input required type="text" v-model="state.genre" id="author" class="input" placeholder="old, motivational">
             </div>
 
             <button @click="handleSubmit($event)">Создать цитату</button>

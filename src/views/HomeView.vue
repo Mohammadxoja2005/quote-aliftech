@@ -314,7 +314,6 @@ export default {
 
  .card-genre {
      font-size: 0.9rem;
-     margin-bottom: 0.5rem;
  }
 
  .card-genre-text {

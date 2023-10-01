@@ -4,6 +4,7 @@ import Loader, { actions as LoaderActions } from "../components/Loader.vue";
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import ErrorPage, { actions as ErrorActions, textActions as ErrorText } from '@/components/ErrorPage.vue';
+import type { IQuote } from '@/models';
 
 export default {
     name: "DefaultView",
@@ -15,7 +16,7 @@ export default {
         const store = useStore();
         const route = useRoute();
 
-        const state: any = reactive({
+        const state: Partial<IQuote> = reactive({
             quote: "",
             author: "",
             genre: "",

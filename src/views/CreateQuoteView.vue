@@ -5,6 +5,7 @@ import { useStore } from "vuex";
 import { uuid } from 'vue-uuid';
 import Loader, { actions as LoaderActions } from "@/components/Loader.vue";
 import ErrorPage, { actions as ErrorActions, textActions as ErrorText } from '@/components/ErrorPage.vue';
+import type { IQuote } from '@/models';
 
 export default {
     name: "CreateQuoteView",
@@ -15,7 +16,7 @@ export default {
     setup() {
         const store = useStore();
 
-        const state: any = reactive({
+        const state: IQuote = reactive({
             id: '',
             quote: '',
             author: '',
@@ -24,7 +25,7 @@ export default {
             updatedAt: ''
         })
 
-        const handleSubmit = async (event: any) => {
+        const handleSubmit = async (event: MouseEvent) => {
             event.preventDefault();
 
             state.id = uuid.v4();

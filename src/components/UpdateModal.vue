@@ -5,8 +5,9 @@ import { VisibilityHandler } from "@/utils/VisibilityHandler";
 import { emitter } from '@/views/HomeView.vue';
 import Loader, { actions as LoaderActions } from "../components/Loader.vue";
 import ErrorPage, { actions as ErrorActions, textActions as ErrorText } from "@/components/ErrorPage.vue";
+import type { IQuote } from "@/models";
 
-const state: any = reactive({
+const state: IQuote = reactive({
     id: '',
     quote: '',
     author: '',
@@ -17,7 +18,7 @@ const state: any = reactive({
 
 export const actions = new VisibilityHandler();
 
-export const getData = (object: any) => {
+export const getData = (object: IQuote) => {
     const { id, quote, author, genre, createdAt } = object;
 
     state.id = id;

@@ -16,7 +16,7 @@ const mutations = {
 }
 
 const actions = {
-    async createQuote(quotes: { author: string, quote: string, genre: string, createdAt: string, updatedAt: string }) {
+    async createQuote({ commit }: any, quotes: { author: string, quote: string, genre: string, createdAt: string, updatedAt: string }) {
 
         try {
             await axios.post('https://backend-aliftech.onrender.com/quotes', quotes)

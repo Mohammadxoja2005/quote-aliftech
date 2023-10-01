@@ -3,11 +3,13 @@ import { onMounted, reactive } from 'vue';
 import Loader, { actions as LoaderActions } from "../components/Loader.vue";
 import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
+import ErrorPage, { actions as ErrorActions } from '@/components/ErrorPage.vue';
 
 export default {
     name: "DefaultView",
     components: {
-        "loader": Loader
+        "loader": Loader,
+        "error-page": ErrorPage
     },
     setup() {
         const store = useStore();
@@ -35,6 +37,7 @@ export default {
                 })
             } catch (error) {
                 console.log(error);
+                ErrorActions.open();
             } finally {
                 LoaderActions.close();
             }
@@ -50,6 +53,7 @@ export default {
 <template>
     <form>
         <loader />
+        <error-page />
         <div class="form-container">
             <div class="input-container">
                 <label for="quote">Текст цитаты: {{ state.quote }}</label>

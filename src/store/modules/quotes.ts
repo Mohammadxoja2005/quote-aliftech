@@ -49,7 +49,7 @@ const actions = {
                     commit("SET_SINGLE_QUOTE", response.data);
                 })
         } catch (error) {
-            console.log(error)
+            throw new Error('something went wrong');
         }
     },
 

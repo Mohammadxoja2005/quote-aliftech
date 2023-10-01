@@ -36,7 +36,6 @@ export default {
                     state.updatedAt = updatedAt;
                 })
             } catch (error) {
-                console.log(error);
                 ErrorActions.open();
             } finally {
                 LoaderActions.close();
@@ -65,6 +64,14 @@ export default {
 
             <div class="input-container">
                 <label for="genre" class="label">Жанры: {{ state.genre }}</label>
+            </div>
+
+            <div class="input-container">
+                <label for="genre" class="label">Дата создание: {{ state.createdAt }}</label>
+            </div>
+
+            <div class="input-container">
+                <label for="genre" class="label">Дата обновление: {{ state.updatedAt }}</label>
             </div>
             <router-link to="/" class=""><button>Пойти в основеую страницу</button></router-link>
         </div>

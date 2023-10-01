@@ -39,7 +39,6 @@ export default {
         const store = useStore();
 
         const handleSubmit = async () => {
-
             LoaderActions.open();
             try {
                 await store.dispatch('updateQuote', state);

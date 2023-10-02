@@ -31,7 +31,7 @@ export default {
             state.createdAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
             state.updatedAt = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-            if (state.author === '' || state.quote == '') {
+            if (state.author.trim() === '' || state.quote.trim() === '') {
                 alert('автор и цитата не может быть пустым')
                 return;
             }

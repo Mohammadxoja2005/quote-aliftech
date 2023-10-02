@@ -39,6 +39,12 @@ export default {
         const store = useStore();
 
         const handleSubmit = async () => {
+
+            if (state.author.trim() === '' || state.quote.trim() === '') {
+                alert('автор и цитата не может быть пустым')
+                return;
+            }
+
             LoaderActions.open();
             try {
                 await store.dispatch('updateQuote', state);
